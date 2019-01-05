@@ -2,34 +2,61 @@
 var gameState = {
   hunters : 0,
   energy: 0,
-  energy_per_hunt: 500,
-  hunter_cost: 20000,
+  energy_per_hunt: 1,
+  hunter_cost: 20,
   hunter_cost_alpha: 1.15,
-  energy_per_farm: 10000,
+  energy_per_farm: 1000,
   farms : 0,
-  farm_cost: 200000,
+  farm_cost: 20000,
   farm_cost_alpha: 1.50,
   year : 1,
   research_tree : {
 	tool : {
-	  cost : 10000,
+	  cost : 1000,
 	  onResearch : function() {
 		gameState.energy_per_hunt *= 1.25;
-	  }
+	  },
+	  prereq_of : ['fire', 'spear'],
+	  prereq : 0,
+	},
+	fire : {
+	  cost : 10000,
+	  onResearch : function() {
+		gameState.energy_per_hunt *= 1.5;
+	  },
+	  prereq_of : ['farm'],
+	  prereq : 0,
+	},
+	spear : {
+	  cost : 15000,
+	  onResearch : function() {
+		gameState.energy_per_hunt *= 2;
+	  },
+	  prereq_of : ['farm'],
+	  prereq : 0,
 	},
 	farm : {
 	  cost : 100000,
 	  onResearch : function() {
 		document.getElementById("buy-farm").style.visibility = "initial";
-	  }
+	  },
+	  prereq_of : [],
+	  prereq : 0,
 	}
   }
 };
 
 function initGame()
 {
-  updateStats();
   document.getElementById("buy-farm").style.visibility = "hidden";
+  for (resname in gameState.research_tree) {
+	var res = gameState.research_tree[resname];
+	for (var i = 0; i < res.prereq_of.length; i++) {
+	  var r = gameState.research_tree[res.prereq_of[i]];
+	  r.prereq += 1;
+	}
+  }
+  updateStats();
   var interval = setInterval(tick, 1000);
 }
 
@@ -63,9 +90,14 @@ function research(resname)
 {
   res = gameState.research_tree[resname];
   if (gameState.energy >= res.cost) {
-	document.getElementById("research-"+resname).style.visibility = "hidden";
+	document.getElementById("research-"+resname).remove();
 	gameState.energy -= res.cost;
 	res.onResearch();
+	for (var i = 0; i < res.prereq_of.length; i++) {
+	  var rname = res.prereq_of[i];
+	  var res2 = gameState.research_tree[rname];
+	  res2.prereq -= 1;
+	}
   }
 }
 
@@ -84,7 +116,18 @@ function updateStats()
   document.getElementById("stat-year").innerHTML = ""+gameState.year;
   for (var resname in gameState.research_tree) {
 	var res = gameState.research_tree[resname];
-	document.getElementById("tech-"+resname+"-cost").innerHTML = formatUnit(res.cost, "J");
+	if (res.prereq == 0) {
+	  var res_button = document.getElementById("research-"+resname);
+	  if (res_button) {
+		res_button.style.visibility = "initial";
+		document.getElementById("tech-"+resname+"-cost").innerHTML = formatUnit(res.cost, "J");
+	  }
+	} else {
+	  var res_button = document.getElementById("research-"+resname);
+	  if (res_button) {
+		res_button.style.visibility = "hidden";
+	  }
+	}
   }
 }
 
