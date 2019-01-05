@@ -1,0 +1,13 @@
+.cost-qty, .stat-qty {
+  font-family: sans-serif;
+}
+
+.cost-qty {
+  color: red;
+}
+
+button {
+  color: black;
+  background-color: white;
+}
+

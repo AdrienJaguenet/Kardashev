@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<title>Kardashev Incremental</title>
+	<link rel="stylesheet" href="style.css" type="text/css" media="all" />
+	<script src="kardashev.js"/></script>
+  </head>
+  <body onload="initGame();">
+	<h1>Kardashev Incremental</h1>
+	<div id="stats-main">
+	  <p>t: <span id="stat-year">0</span></p>
+	  <div id="stat-energy">
+		<span class="stat-name" id="energy-name">Energy: </span>
+		<span class="stat-qty" id="stat-energy-qty">0</span>
+	  </div>
+	  <div id="stat-power">
+		<span class="stat-name" id="power-name">Power: </span>
+		<span class="stat-qty" id="stat-power-qty">0</span>
+	  </div>
+	  <div id="stat-hunters">
+		<span class="stat-name" id="hunters-name">Hunters: </span>
+		<span class="stat-qty" id="stat-hunters-qty">0</span>
+		</div>
+	  <div id="stat-farms">
+		<span class="stat-name" id="farms-name">Farms: </span>
+		<span class="stat-qty" id="stat-farms-qty">0</span>
+		</div>
+	</div>
+	<h2>Buy</h2>
+	<div id="controls-buy">
+	  <button id="manual-hunt" onclick="manual_hunt()">Hunt (
+		<span class="gain-qty" id="hunt-qty">0</span>
+		)</button><br/>
+	  <button id="buy-hunter" onclick="buy_hunter();">Buy hunter (cost 
+		<span class="cost-qty" id="hunter-cost">0</span>
+		, <span class="gain-qty" id="hunter-gain">0</span>
+		)</button>
+	  <button id="buy-farm" onclick="buy_farm();">Buy farm (cost 
+		<span class="cost-qty" id="farm-cost">0</span>
+		, <span class="gain-qty" id="farm-gain">0</span>
+		)</button>
+	</div>
+	<h2> Technologies </h2>
+	<div id="controls-tech">
+	  <button id="research-farm" onclick="research_farm()">Farm (cost
+		<span class="cost-qty" id="tech-farm-cost">0</span>
+		): unlock farms</button>
+	  </button>
+	  <button id="research-tool" onclick="research_tool()">Tool (cost
+		<span class="cost-qty" id="tech-tool-cost">0</span>
+		): +25 % hunting power</button>
+	</div >
+  </body>
+</html>
