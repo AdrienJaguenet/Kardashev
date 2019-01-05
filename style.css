@@ -6,6 +6,10 @@
   color: red;
 }
 
+.gain-qty {
+  color: green;
+}
+
 button {
   color: black;
   background-color: white;

@@ -3,18 +3,20 @@ var gameState = {
   hunters : 0,
   energy: 0,
   energy_per_hunt: 1,
+  energy_per_click : 2,
   hunter_cost: 20,
-  hunter_cost_alpha: 1.15,
+  hunter_cost_alpha: 1.1,
   energy_per_farm: 1000,
   farms : 0,
   farm_cost: 20000,
-  farm_cost_alpha: 1.50,
+  farm_cost_alpha: 1.1,
   year : 1,
   research_tree : {
 	tool : {
 	  cost : 1000,
 	  onResearch : function() {
 		gameState.energy_per_hunt *= 1.25;
+		unlock_element("upgrade-tools");
 	  },
 	  prereq_of : ['fire', 'spear'],
 	  prereq : 0,
@@ -22,7 +24,7 @@ var gameState = {
 	fire : {
 	  cost : 10000,
 	  onResearch : function() {
-		gameState.energy_per_hunt *= 1.5;
+		gameState.energy_per_hunt *= 1.25;
 	  },
 	  prereq_of : ['farm'],
 	  prereq : 0,
@@ -30,21 +32,42 @@ var gameState = {
 	spear : {
 	  cost : 15000,
 	  onResearch : function() {
-		gameState.energy_per_hunt *= 2;
+		gameState.energy_per_hunt *= 1.5;
+	  },
+	  prereq_of : ['bow'],
+	  prereq : 0,
+	},
+	bow : {
+	  cost : 30000,
+	  onResearch : function() {
+		gameState.energy_per_hunt *= 2.;
 	  },
 	  prereq_of : ['farm'],
 	  prereq : 0,
 	},
 	farm : {
-	  cost : 100000,
+	  cost : 1000000,
 	  onResearch : function() {
-		document.getElementById("buy-farm").style.visibility = "initial";
+		unlock_element("buy-farm");
 	  },
 	  prereq_of : [],
 	  prereq : 0,
 	}
+  },
+  upgrades : {
+	tools : {
+	  cost : 500,
+	  onUpgrade : function() {
+		gameState.energy_per_click *= 1.1;
+	  },
+	  alpha : 1.2
+	},
   }
 };
+
+function unlock_element(elmname) {
+		document.getElementById(elmname).style.visibility = "initial";
+}
 
 function initGame()
 {
@@ -56,13 +79,16 @@ function initGame()
 	  r.prereq += 1;
 	}
   }
+  for (resname in gameState.upgrades) {
+	document.getElementById("upgrade-"+resname).style.visibility = "hidden";
+  }
   updateStats();
   var interval = setInterval(tick, 1000);
 }
 
 function manual_hunt()
 {
-  gameState.energy += gameState.energy_per_hunt;
+  gameState.energy += gameState.energy_per_click;
   updateStats();
 }
 
@@ -101,6 +127,15 @@ function research(resname)
   }
 }
 
+function upgrade(resname)
+{
+  res = gameState.upgrades[resname];
+  if (gameState.energy >= res.cost) {
+	gameState.energy -= res.cost;
+	res.onUpgrade();
+	res.cost *= res.alpha;
+  }
+}
 
 function updateStats()
 {
@@ -108,12 +143,16 @@ function updateStats()
   document.getElementById("stat-hunters-qty").innerHTML = ""+gameState.hunters;
   document.getElementById("stat-farms-qty").innerHTML = ""+gameState.farms;
   document.getElementById("stat-power-qty").innerHTML = formatUnit(totalPower(), "W");
-  document.getElementById("hunt-qty").innerHTML = formatUnit(gameState.energy_per_hunt, "J");
+  document.getElementById("hunt-qty").innerHTML = formatUnit(gameState.energy_per_click, "J");
   document.getElementById("hunter-cost").innerHTML = formatUnit(gameState.hunter_cost, "J");
   document.getElementById("hunter-gain").innerHTML = formatUnit(gameState.energy_per_hunt, "W");
   document.getElementById("farm-cost").innerHTML = formatUnit(gameState.farm_cost, "J");
   document.getElementById("farm-gain").innerHTML = ""+formatUnit(gameState.energy_per_farm, "W");
   document.getElementById("stat-year").innerHTML = ""+gameState.year;
+  for (var upname in gameState.upgrades) {
+	var u = gameState.upgrades[upname];
+	document.getElementById("upgrade-"+upname+"-cost").innerHTML = formatUnit(u.cost, "J");
+  }
   for (var resname in gameState.research_tree) {
 	var res = gameState.research_tree[resname];
 	if (res.prereq == 0) {
