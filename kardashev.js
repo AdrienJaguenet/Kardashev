@@ -211,7 +211,7 @@ var gameState = {
 	  cost : 100,
 	  level : 0,
 	  onUpgrade : function () {
-		gameState.buildings['hunter'].energy *= 1.1;
+		gameState.buildings['hunter'].power *= 1.1;
 	  },
 	  alpha : 1.1,
 	},
@@ -237,13 +237,23 @@ var gameState = {
 	},
 	smiths : {
 	  name : 'Smiths',
-	  desc : '+ 5 % manual farming power',
+	  desc : '+ 10 % mill power',
 	  cost : 70000,
 	  level : 0,
 	  onUpgrade : function() {
-		gameState.activities['farming'].energy *= 1.05
+		gameState.buildings['mill'].power *= 1.1;
 	  },
 	  alpha : 1.06
+	},
+	factory : {
+	  name : 'Factories',
+	  desc : '+ 10 % steam power',
+	  cost : 10000000,
+	  level : 0,
+	  onUpgrade : function() {
+		gameState.buildings['steam'].power *= 1.5
+	  },
+	  alpha : 1.11
 	}
   },
   buildings : {
