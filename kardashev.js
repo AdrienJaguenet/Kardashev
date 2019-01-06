@@ -251,9 +251,9 @@ var gameState = {
 	  cost : 10000000,
 	  level : 0,
 	  onUpgrade : function() {
-		gameState.buildings['steam'].power *= 1.5
+		gameState.buildings['steam'].power *= 1.1
 	  },
-	  alpha : 1.11
+	  alpha : 1.15
 	}
   },
   buildings : {
@@ -288,36 +288,42 @@ var gameState = {
 	steam : {
 	  name : 'Steam machines',
 	  total : 0,
-	  cost : 1000000,
+	  cost :  1000000,
 	  alpha : 1.05,
 	  power : 100000
 	},
 	coal_plant : {
 	  name : 'Coal plants',
 	  total : 0,
-	  cost :  10000000000,
+	  cost :  1000000000,
 	  alpha : 1.05,
-	  power : 100000000
+	  power : 10000000
 	},
 	fission_plant : {
 	  name : 'Nuclear fission plants',
 	  total : 0,
-	  cost :  50000000000,
+	  cost :  5000000000,
 	  alpha : 1.05,
-	  power : 500000000
+	  power : 50000000
 	},
 	fusion_plant : {
 	  name : 'Nuclear fusion plants',
 	  total : 0,
-	  cost :  1000000000000,
+	  cost :  10000000000,
 	  alpha : 1.05,
-	  power : 5000000000
+	  power : 500000000
 	}
   }
 };
 
 function unlock_element(elmname) {
 		document.getElementById(elmname).style.visibility = "initial";
+		document.getElementById(elmname).style.display = "";
+}
+
+function lock_element(elmname) {
+		document.getElementById(elmname).style.visibility = "hidden";
+		document.getElementById(elmname).style.display = "none";
 }
 
 function unlock_building(bname) {
@@ -329,7 +335,6 @@ function unlock_building(bname) {
 function initGame()
 {
   genButtons();
-  document.getElementById("buy-farm").style.visibility = "hidden";
   for (resname in gameState.research_tree) {
 	var res = gameState.research_tree[resname];
 	for (var i = 0; i < res.prereq_of.length; i++) {
@@ -338,16 +343,16 @@ function initGame()
 	}
   }
   for (resname in gameState.upgrades) {
-	document.getElementById("upgrade-"+resname).style.visibility = "hidden";
+	lock_element("upgrade-"+resname);
   }
   for (resname in gameState.activities) {
-	document.getElementById("manual-"+resname).style.visibility = "hidden";
+	lock_element("manual-"+resname);
   }
 
   for (resname in gameState.buildings) {
-	document.getElementById("buy-"+resname).style.visibility = "hidden";
-	document.getElementById("stat-"+resname).style.visibility = "hidden";
-	document.getElementById(resname+"-qty").style.visibility = "hidden";
+	lock_element("buy-"+resname);
+	lock_element("stat-"+resname);
+	lock_element(resname+"-qty");
   }
   unlock_element("manual-hunt");
   unlock_building("hunter");
@@ -461,12 +466,14 @@ function updateStats()
 	  var res_button = document.getElementById("research-"+resname);
 	  if (res_button) {
 		res_button.style.visibility = "initial";
+		res_button.style.display = "";
 		document.getElementById("tech-"+resname+"-cost").innerHTML = formatUnit(res.cost, "J");
 	  }
 	} else {
 	  var res_button = document.getElementById("research-"+resname);
 	  if (res_button) {
 		res_button.style.visibility = "hidden";
+		res_button.style.display = "none";
 	  }
 	}
   }
@@ -513,6 +520,12 @@ function formatUnit(qty, unit) {
   } else if (range == 4) {
 	prefix="T";
 	qty /= 1000000000000;
+  } else if (range == 5) {
+	prefix="P";
+	qty /= 1000000000000000;
+  } else if (range == 6) {
+	prefix="E";
+	qty /= 1000000000000000000;
   }
   return qty.toFixed(2)+"&nbsp;"+prefix+unit;
 }

@@ -1,3 +1,8 @@
+body {
+  background-image: url("res/bg-1.jpeg");
+  color: white;
+}
+
 .cost-qty, .stat-qty {
   font-family: sans-serif;
 }
@@ -11,7 +16,13 @@
 }
 
 button {
-  color: black;
-  background-color: white;
+  background-color: black;
+}
+
+#content {
+  border: solid black 1px;
+  margin: 1em;
+  padding: 1em;
+  background-color: rgba(0,0,0,0.8);
 }
 
