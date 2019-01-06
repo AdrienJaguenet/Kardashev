@@ -8,6 +8,7 @@
   </head>
   <body onload="initGame();">
 	<h1>Kardashev Incremental</h1>
+	<h2>Civilisation level: <span id="civ-level">0</span></h2>
 	<div id="stats-main">
 	  <p>t: <span id="stat-year">0</span></p>
 	  <div id="stat-energy">
@@ -18,18 +19,6 @@
 		<span class="stat-name" id="power-name">Power: </span>
 		<span class="stat-qty" id="stat-power-qty">0</span>
 	  </div>
-	  <div id="stat-hunter">
-		<span class="stat-name" id="hunter-name">Hunters: </span>
-		<span class="stat-qty" id="hunter-qty">0</span>
-		</div>
-	  <div id="stat-fisher">
-		<span class="stat-name" id="fisher-name">Fishers: </span>
-		<span class="stat-qty" id="fisher-qty">0</span>
-		</div>
-	  <div id="stat-farm">
-		<span class="stat-name" id="farms-name">Farms: </span>
-		<span class="stat-qty" id="farm-qty">0</span>
-		</div>
 	</div>
 	<h2>Activities</h2>
 	<div id="controls-activities">
@@ -45,78 +34,12 @@
 	</div>
 	<h2>Buy</h2>
 	<div id="controls-buy">
-	  <button id="buy-hunter" onclick="buy('hunter');">Buy hunter (cost 
-		<span class="cost-qty" id="hunter-cost">0</span>
-		, <span class="gain-qty" id="hunter-gain">0</span>
-		)</button>
-	  <button id="buy-fisher" onclick="buy('fisher');">Buy fisher (cost 
-		<span class="cost-qty" id="fisher-cost">0</span>
-		, <span class="gain-qty" id="fisher-gain">0</span>
-		)</button>
-	  <button id="buy-farm" onclick="buy('farm');">Buy farm (cost 
-		<span class="cost-qty" id="farm-cost">0</span>
-		, <span class="gain-qty" id="farm-gain">0</span>
-		)</button>
 	</div>
 	<h2> Technologies </h2>
 	<div id="controls-tech">
-	  <button id="research-tool" onclick="research('tool')">Tool (cost
-		<span class="cost-qty" id="tech-tool-cost">0</span>
-		): +25 % hunting power</button>
-	  <button id="research-fire" onclick="research('fire')">Fire (cost
-		<span class="cost-qty" id="tech-fire-cost">0</span>
-		): +25 % hunting power</button>
-	  <button id="research-spear" onclick="research('spear')">Spear (cost
-		<span class="cost-qty" id="tech-spear-cost">0</span>
-		): +50 % hunting power</button>
-	  <button id="research-fishing" onclick="research('fishing')">Fishing (cost
-		<span class="cost-qty" id="tech-fishing-cost">0</span>
-		): unlocks fishing</button>
-	  <button id="research-boat" onclick="research('boat')">Boat (cost
-		<span class="cost-qty" id="tech-boat-cost">0</span>
-		): +50 % fishing power</button>
-	  <button id="research-bow" onclick="research('bow')">Bow (cost
-		<span class="cost-qty" id="tech-bow-cost">0</span>
-		): +100 % hunting power</button>
-	  <button id="research-farm" onclick="research('farm')">Farm (cost
-		<span class="cost-qty" id="tech-farm-cost">0</span>
-		): unlock farms</button>
-	  </button>
-	  <button id="research-husbandry" onclick="research('husbandry')">Husbandry (cost
-		<span class="cost-qty" id="tech-husbandry-cost">0</span>
-		): + 150 % farm power</button>
-	  </button>
-	  <button id="research-plough" onclick="research('plough')">Plough (cost
-		<span class="cost-qty" id="tech-plough-cost">0</span>
-		): + 50 % farm power</button>
-	  </button>
-	  <button id="research-yoke" onclick="research('yoke')">Yoke (cost
-		<span class="cost-qty" id="tech-yoke-cost">0</span>
-		): + 50 % farm power</button>
-	  </button>
-	  <button id="research-rope" onclick="research('rope')">Rope (cost
-		<span class="cost-qty" id="tech-rope-cost">0</span>
-		): use it to kill yourself</button>
-	  </button>
 	</div >
 	<h2> Upgrades </h2>
-	<div id="control-upgrades">
-	  <button id="upgrade-tools" onclick="upgrade('tools')">Tools (cost
-		<span class="cost-qty" id="upgrade-tools-cost">0</span>
-		): +10 % manual hunting power (level
-		<span id="upgrade-tools-level">0</span>)
-	  </button>
-	</div>
-	  <button id="upgrade-harpoons" onclick="upgrade('harpoons')">Harpoons (cost
-		<span class="cost-qty" id="upgrade-harpoons-cost">0</span>
-		): +15 % manual fishing power (level
-		<span id="upgrade-harpoons-level">0</span>)
-	  </button>
-	  <button id="upgrade-granary" onclick="upgrade('granary')">Granaries (cost
-		<span class="cost-qty" id="upgrade-granary-cost">0</span>
-		): +20 % manual farming power (level
-		<span id="upgrade-granary-level">0</span>)
-	  </button>
+	<div id="controls-upgrades">
 	</div>
   </body>
 </html>

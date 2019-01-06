@@ -1,6 +1,7 @@
 
 var gameState = {
-  energy: 0,
+  energy : 0,
+  bits : 0,
   year : 1,
   activities : {
 	hunt : {
@@ -15,6 +16,8 @@ var gameState = {
   },
   research_tree : {
 	tool : {
+	  name : 'Tool',
+	  desc : '+ 25 % hunting power',
 	  cost : 1000,
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 1.25;
@@ -24,6 +27,8 @@ var gameState = {
 	  prereq : 0,
 	},
 	fire : {
+	  name : 'Fire',
+	  desc : '+ 25 % hunting power',
 	  cost : 10000,
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 1.25;
@@ -32,15 +37,20 @@ var gameState = {
 	  prereq : 0,
 	},
 	spear : {
-	  cost : 15000,
+	  name : 'Spear',
+	  desc : '+ 50 % hunting power, unlocks atlatl',
+	  cost : 1500,
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 1.5;
+		unlock_element("upgrade-atlatl");
 	  },
 	  prereq_of : ['bow', 'fishing'],
 	  prereq : 0,
 	},
 	fishing : {
-	  cost : 25000,
+	  name : 'Fishing',
+	  desc : 'unlocks fishermen',
+	  cost : 5000,
 	  onResearch : function () {
 		unlock_element("manual-fish");
 		unlock_building("fisher");
@@ -50,14 +60,18 @@ var gameState = {
 	  prereq : 0,
 	},
 	boat : {
-	  cost : 40000,
+	  name : 'Boats',
+	  desc : '+ 50 % fishing power',
+	  cost : 10000,
 	  onResearch : function () {
 		gameState.buildings['fisher'].power *= 1.5;
 	  },
-	  prereq_of : ['rope'],
+	  prereq_of : [],
 	  prereq : 0,
 	},
 	bow : {
+	  name : 'Bow',
+	  desc : '+ 100 % hunting power',
 	  cost : 30000,
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 2.;
@@ -66,17 +80,21 @@ var gameState = {
 	  prereq : 0,
 	},
 	farm : {
-	  cost : 1000000,
+	  name : 'Farming',
+	  desc : 'unlocks farms',
+	  cost : 100000,
 	  onResearch : function() {
 		unlock_building("farm");
 		unlock_element("manual-farming");
 		unlock_element("upgrade-granary");
 	  },
-	  prereq_of : ['husbandry', 'plough'],
+	  prereq_of : ['husbandry', 'plough', 'mills'],
 	  prereq : 0,
 	},
 	plough : {
-	  cost : 1500000,
+	  name : 'Plough',
+	  desc : '+ 50 % farming power',
+	  cost : 150000,
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 1.5;
 	  },
@@ -84,24 +102,93 @@ var gameState = {
 	  prereq_of : []
 	},
 	husbandry : {
-	  cost : 1300000,
+	  name : 'Husbandry',
+	  desc : '+ 150 % farming power',
+	  cost : 130000,
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 2.5;
 	  },
 	  prereq : 0,
-	  prereq_of : ['yoke']
+	  prereq_of : ['yoke', 'horses', 'oxen']
 	},
 	yoke : {
-	  cost : 2000000,
+	  name : 'Yoke',
+	  desc : '+ 50 % farming power',
+	  cost : 200000,
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 1.5;
 	  },
 	  prereq : 0,
-	  prereq_of : ['rope']
+	  prereq_of : []
 	},
-	rope : {
-	  cost : 100000000,
+	mills : {
+	  name : 'Mill',
+	  desc : 'unlocks mills, + 100 % farming power',
+	  cost : 100000,
 	  onResearch : function() {
+		gameState.buildings['farm'].power *= 2;
+		unlock_building('mill');
+	  },
+	  prereq : 0,
+	  prereq_of : ['metallurgy']
+	},
+	horses : {
+	  name : 'Horses',
+	  desc : '+ 50 % mill power',
+	  cost : 200000,
+	  onResearch : function()  {
+		gameState.buildings['mill'].power *= 1.5;
+	  },
+	  prereq : 0,
+	  prereq_of : []
+	},
+	oxen : {
+	  name : 'Oxen',
+	  desc : '+ 100 % mill power, + 500 % farming power',
+	  cost : 500000,
+	  onResearch : function() {
+		gameState.buildings['mill'].power *= 2;
+		gameState.buildings['farm'].power *= 6;
+	  },
+	  prereq : 0,
+	  prereq_of : []
+	},
+	metallurgy : {
+	  name : 'Metallurgy',
+	  desc : 'unlocks smiths',
+	  cost : 1000000,
+	  onResearch : function() {
+		unlock_element('upgrade-smiths');
+	  },
+	  prereq : 0,
+	  prereq_of : ['steammachine']
+	},
+	steammachine : {
+	  name : 'Steam machine',
+	  desc : 'unlocks steam machines',
+	  cost : 10000000,
+	  onResearch : function() {
+		unlock_building('steam');
+	  },
+	  prereq : 0,
+	  prereq_of : ['electricity', 'industry']
+	},
+	industry : {
+	  name : 'Industry',
+	  desc : '+ 200 % steam power, unlocks factory upgrade',
+	  cost : 25000000,
+	  onResearch : function() {
+		unlock_element('upgrade-factory');
+	  },
+	  prereq : 0,
+	  prereq_of : ['electricity']
+	},
+	electricity : {
+	  name : 'Electricity',
+	  desc : '+ 100 % steam power',
+	  cost : 50000000,
+	  onResearch : function() {
+		unlock_building('coal_plant');
 	  },
 	  prereq : 0,
 	  prereq_of : []
@@ -109,6 +196,8 @@ var gameState = {
   },
   upgrades : {
 	tools : {
+	  name : 'Tools',
+	  desc : '+ 10 % manual hunting power',
 	  cost : 500,
 	  level : 0,
 	  onUpgrade : function() {
@@ -116,41 +205,103 @@ var gameState = {
 	  },
 	  alpha : 1.2
 	},
+	atlatl : {
+	  name : 'Atlatl',
+	  desc : '+ 10 % hunting power',
+	  cost : 100,
+	  level : 0,
+	  onUpgrade : function () {
+		gameState.buildings['hunter'].energy *= 1.1;
+	  },
+	  alpha : 1.1,
+	},
 	harpoons : {
+	  name : 'Harpoons',
+	  desc : '+ 15 % manual fishing power',
 	  cost : 6000,
 	  level : 0,
 	  onUpgrade : function() {
 		gameState.activities['fish'].energy *= 1.15;
 	  },
-	  alpha : 1.2
+	  alpha : 1.1
 	},
 	granary : {
+	  name : 'Granaries',
+	  desc : '+ 20 % manual farming power',
 	  cost : 60000,
 	  level : 0,
 	  onUpgrade : function() {
 		gameState.activities['farming'].energy *= 1.20;
 	  },
-	  alpha : 1.2
+	  alpha : 1.1
 	},
+	smiths : {
+	  name : 'Smiths',
+	  desc : '+ 5 % manual farming power',
+	  cost : 70000,
+	  level : 0,
+	  onUpgrade : function() {
+		gameState.activities['farming'].energy *= 1.05
+	  },
+	  alpha : 1.06
+	}
   },
   buildings : {
 	hunter : {
+	  name : 'Hunters',
 	  total : 0,
-	  cost : 20,
+	  cost : 5,
 	  alpha : 1.05,
 	  power : 1
 	},
 	fisher : {
+	  name : 'Fishers',
 	  total : 0,
 	  cost : 750,
 	  alpha : 1.05,
 	  power : 5
 	},
 	farm : {
+	  name : 'Farms',
 	  total : 0,
 	  cost : 15000,
-	  alpha : 1.1,
+	  alpha : 1.07,
 	  power : 1000
+	},
+	mill : {
+	  name : 'Mills',
+	  total : 0,
+	  cost : 50000,
+	  alpha : 1.07,
+	  power : 5000
+	},
+	steam : {
+	  name : 'Steam machines',
+	  total : 0,
+	  cost : 1000000,
+	  alpha : 1.05,
+	  power : 100000
+	},
+	coal_plant : {
+	  name : 'Coal plants',
+	  total : 0,
+	  cost :  10000000000,
+	  alpha : 1.05,
+	  power : 100000000
+	},
+	fission_plant : {
+	  name : 'Nuclear fission plants',
+	  total : 0,
+	  cost :  50000000000,
+	  alpha : 1.05,
+	  power : 500000000
+	},
+	fusion_plant : {
+	  name : 'Nuclear fusion plants',
+	  total : 0,
+	  cost :  1000000000000,
+	  alpha : 1.05,
+	  power : 5000000000
 	}
   }
 };
@@ -167,6 +318,7 @@ function unlock_building(bname) {
 
 function initGame()
 {
+  genButtons();
   document.getElementById("buy-farm").style.visibility = "hidden";
   for (resname in gameState.research_tree) {
 	var res = gameState.research_tree[resname];
@@ -236,11 +388,54 @@ function upgrade(resname)
   }
 }
 
+function genButtons()
+{
+  var stats_elm = document.getElementById("stats-main");
+  var buy_elm = document.getElementById("controls-buy");
+  var tech_elm = document.getElementById("controls-tech");
+  var up_elm = document.getElementById("controls-upgrades");
+  for (var bname in gameState.buildings) {
+	var building = gameState.buildings[bname];
+	stats_elm.innerHTML +=
+	  '<div id="stat-'+bname+'">'+
+		'<span class="stat-name" id="hunter-name">'+building.name+': </span>'+
+		'<span class="stat-qty" id="'+bname+'-qty">0</span>'+
+		'</div>'
+	buy_elm.innerHTML += 
+	  '<button id="buy-'+bname+'" onclick="buy(\''+bname+'\');">Buy '+bname+' (cost '+
+		'<span class="cost-qty" id="'+bname+'-cost">0</span>'+
+		', <span class="gain-qty" id="'+bname+'-gain">0</span>'+
+		')</button>'
+  }
+  for (var tname in gameState.research_tree) {
+	var tech = gameState.research_tree[tname];
+	  tech_elm.innerHTML += 
+	  '<button id="research-'+tname+'" onclick="research(\''+tname+'\')">'+tech.name+' (cost '+
+		'<span class="cost-qty" id="tech-'+tname+'-cost">0</span>'+
+		'): '+tech.desc+'</button>'
+  }
+  for (var uname in gameState.upgrades) {
+	var upgrade = gameState.upgrades[uname];
+	up_elm.innerHTML +=
+	  '<button id="upgrade-'+uname+'" onclick="upgrade(\''+uname+'\')">"'+upgrade.name+'" (cost '+
+		'<span class="cost-qty" id="upgrade-'+uname+'-cost">0</span>'+
+		'): '+upgrade.desc+' (level'+
+		'<span id="upgrade-'+uname+'-level">0</span>)'+
+	  ')</button>'
+  }
+}
+
+function getSaganKardashevLvl(power)
+{
+  return (Math.log10(power) - 6) / 10;
+}
+
 function updateStats()
 {
   document.getElementById("stat-energy-qty").innerHTML = formatUnit(gameState.energy, "J");
   document.getElementById("stat-power-qty").innerHTML = formatUnit(totalPower(), "W");
   document.getElementById("stat-year").innerHTML = ""+gameState.year;
+  document.getElementById("civ-level").innerHTML = getSaganKardashevLvl(totalPower()).toFixed(3);
   for (var bname in gameState.buildings) {
 	var b = gameState.buildings[bname];
 	document.getElementById(bname+"-qty").innerHTML = b.total;
