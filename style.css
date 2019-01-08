@@ -1,6 +1,7 @@
 body {
   background-image: url("res/bg-1.jpeg");
   color: white;
+  background-size: cover;
 }
 
 .cost-qty, .stat-qty {
