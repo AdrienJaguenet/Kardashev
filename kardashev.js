@@ -181,7 +181,7 @@ var gameState = {
 		unlock_element('upgrade-factory');
 	  },
 	  prereq : 0,
-	  prereq_of : ['electricity']
+	  prereq_of : ['electricity', 'mining']
 	},
 	electricity : {
 	  name : 'Electricity',
@@ -189,6 +189,16 @@ var gameState = {
 	  cost : 50000000,
 	  onResearch : function() {
 		unlock_building('coal_plant');
+	  },
+	  prereq : 0,
+	  prereq_of : []
+	},
+	mining : {
+	  name : 'Mining',
+	  desc : '+ 100 % coal plant power, unlocks mines upgrade',
+	  cost : 50000000,
+	  onResearch : function() {
+		unlock_element('upgrade-mines');
 	  },
 	  prereq : 0,
 	  prereq_of : []
@@ -213,7 +223,7 @@ var gameState = {
 	  onUpgrade : function () {
 		gameState.buildings['hunter'].power *= 1.05;
 	  },
-	  alpha : 1.5,
+	  alpha : 1.15,
 	},
 	harpoons : {
 	  name : 'Harpoons',
@@ -237,13 +247,13 @@ var gameState = {
 	},
 	smiths : {
 	  name : 'Smiths',
-	  desc : '+ 10 % mill power',
+	  desc : '+ 5 % mill power',
 	  cost : 70000,
 	  level : 0,
 	  onUpgrade : function() {
-		gameState.buildings['mill'].power *= 1.1;
+		gameState.buildings['mill'].power *= 1.05;
 	  },
-	  alpha : 1.06
+	  alpha : 1.15
 	},
 	factory : {
 	  name : 'Factories',
@@ -251,7 +261,17 @@ var gameState = {
 	  cost : 10000000,
 	  level : 0,
 	  onUpgrade : function() {
-		gameState.buildings['steam'].power *= 1.05
+		gameState.buildings['steam'].power *= 1.05;
+	  },
+	  alpha : 1.15
+	},
+	mines : {
+	  name : 'Mines',
+	  desc : '+ 5 % coal plant power',
+	  cost : 10000000,
+	  level : 0,
+	  onUpgrade : function() {
+		gameState.buildings['coal_plant'].power *= 1.05;
 	  },
 	  alpha : 1.15
 	}
