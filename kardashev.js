@@ -207,13 +207,13 @@ var gameState = {
 	},
 	atlatl : {
 	  name : 'Atlatl',
-	  desc : '+ 10 % hunting power',
+	  desc : '+ 5 % hunting power',
 	  cost : 100,
 	  level : 0,
 	  onUpgrade : function () {
-		gameState.buildings['hunter'].power *= 1.1;
+		gameState.buildings['hunter'].power *= 1.05;
 	  },
-	  alpha : 1.1,
+	  alpha : 1.5,
 	},
 	harpoons : {
 	  name : 'Harpoons',
@@ -247,11 +247,11 @@ var gameState = {
 	},
 	factory : {
 	  name : 'Factories',
-	  desc : '+ 10 % steam power',
+	  desc : '+ 5 % steam power',
 	  cost : 10000000,
 	  level : 0,
 	  onUpgrade : function() {
-		gameState.buildings['steam'].power *= 1.1
+		gameState.buildings['steam'].power *= 1.05
 	  },
 	  alpha : 1.15
 	}
