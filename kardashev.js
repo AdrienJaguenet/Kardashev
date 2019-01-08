@@ -409,6 +409,7 @@ function research(resname)
 	  var res2 = gameState.research_tree[rname];
 	  res2.prereq -= 1;
 	}
+	updateStats();
   }
 }
 
@@ -440,7 +441,7 @@ function genButtons()
 	  '<button id="buy-'+bname+'" onclick="buy(\''+bname+'\');">Buy '+bname+' (cost '+
 		'<span class="cost-qty" id="'+bname+'-cost">0</span>'+
 		', <span class="gain-qty" id="'+bname+'-gain">0</span>'+
-		')</button>'
+		')</button><br/>'
   }
   for (var tname in gameState.research_tree) {
 	var tech = gameState.research_tree[tname];
@@ -452,7 +453,7 @@ function genButtons()
   for (var uname in gameState.upgrades) {
 	var upgrade = gameState.upgrades[uname];
 	up_elm.innerHTML +=
-	  '<button id="upgrade-'+uname+'" onclick="upgrade(\''+uname+'\')">"'+upgrade.name+'" (cost '+
+	  '<button id="upgrade-'+uname+'" onclick="upgrade(\''+uname+'\')">'+upgrade.name+' (cost '+
 		'<span class="cost-qty" id="upgrade-'+uname+'-cost">0</span>'+
 		'): '+upgrade.desc+' (level'+
 		'<span id="upgrade-'+uname+'-level">0</span>)'+
