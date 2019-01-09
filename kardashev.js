@@ -337,13 +337,13 @@ var gameState = {
 };
 
 function unlock_element(elmname) {
-		document.getElementById(elmname).style.visibility = "initial";
-		document.getElementById(elmname).style.display = "";
+  document.getElementById(elmname).style.visibility = "initial";
+  document.getElementById(elmname).style.display = "";
 }
 
 function lock_element(elmname) {
-		document.getElementById(elmname).style.visibility = "hidden";
-		document.getElementById(elmname).style.display = "none";
+  document.getElementById(elmname).style.visibility = "hidden";
+  document.getElementById(elmname).style.display = "none";
 }
 
 function unlock_building(bname) {
@@ -434,29 +434,31 @@ function genButtons()
 	var building = gameState.buildings[bname];
 	stats_elm.innerHTML +=
 	  '<div id="stat-'+bname+'">'+
-		'<span class="stat-name" id="hunter-name">'+building.name+': </span>'+
-		'<span class="stat-qty" id="'+bname+'-qty">0</span>'+
-		'</div>'
+	  '<span class="stat-name" id="hunter-name">'+building.name+': </span>'+
+	  '<span class="stat-qty" id="'+bname+'-qty">0</span>'+
+	  '</div>'
 	buy_elm.innerHTML += 
-	  '<button id="buy-'+bname+'" onclick="buy(\''+bname+'\');">Buy '+bname+' (cost '+
-		'<span class="cost-qty" id="'+bname+'-cost">0</span>'+
-		', <span class="gain-qty" id="'+bname+'-gain">0</span>'+
-		')</button><br/>'
+	  '<div id="buy-'+bname+'" class="buy-building">'+
+	  '<span class="building-desc" id="'+bname+'-desc">'+building.name+'</span> '+
+	  'cost <span class="cost-qty" id="'+bname+'-cost">0</span>'+
+	  ', generates <span class="gain-qty" id="'+bname+'-gain">0</span> '+
+	  '<button onclick="buy(\''+bname+'\');">Buy</button>'
+	  '</div>'
   }
   for (var tname in gameState.research_tree) {
 	var tech = gameState.research_tree[tname];
-	  tech_elm.innerHTML += 
+	tech_elm.innerHTML += 
 	  '<button id="research-'+tname+'" onclick="research(\''+tname+'\')">'+tech.name+' (cost '+
-		'<span class="cost-qty" id="tech-'+tname+'-cost">0</span>'+
-		'): '+tech.desc+'</button>'
+	  '<span class="cost-qty" id="tech-'+tname+'-cost">0</span>'+
+	  '): '+tech.desc+'</button>'
   }
   for (var uname in gameState.upgrades) {
 	var upgrade = gameState.upgrades[uname];
 	up_elm.innerHTML +=
 	  '<button id="upgrade-'+uname+'" onclick="upgrade(\''+uname+'\')">'+upgrade.name+' (cost '+
-		'<span class="cost-qty" id="upgrade-'+uname+'-cost">0</span>'+
-		'): '+upgrade.desc+' (level'+
-		'<span id="upgrade-'+uname+'-level">0</span>)'+
+	  '<span class="cost-qty" id="upgrade-'+uname+'-cost">0</span>'+
+	  '): '+upgrade.desc+' (level'+
+	  '<span id="upgrade-'+uname+'-level">0</span>)'+
 	  ')</button>'
   }
 }

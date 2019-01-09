@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html>
-	<head>
+  <head>
 	<meta charset="utf-8">
 	<title>Kardashev Incremental</title>
 	<link rel="stylesheet" href="style.css" type="text/css" media="all" />
 	<script src="kardashev.js"/></script>
-	</head>
-	<body onload="initGame();">
+  </head>
+  <body onload="initGame();">
 	<header>
-		<h1>Kardashev Incremental</h1>
-		<h2>Civilisation level: <span id="civ-level">0</span></h2>
+	  <h1>Kardashev Incremental</h1>
+	  <h2>Civilisation level: <span id="civ-level">0</span></h2>
 	</header>
 	<div id="content">
-		<div id="stats-main">
+	  <div id="stats-main">
 		<p>t: <span id="stat-year">0</span></p>
 		<div id="stat-energy">
-			<span class="stat-name" id="energy-name">Energy: </span>
-			<span class="stat-qty" id="stat-energy-qty">0</span>
+		  <span class="stat-name" id="energy-name">Energy: </span>
+		  <span class="stat-qty" id="stat-energy-qty">0</span>
 		</div>
 		<div id="stat-power">
-			<span class="stat-name" id="power-name">Power: </span>
-			<span class="stat-qty" id="stat-power-qty">0</span>
+		  <span class="stat-name" id="power-name">Power: </span>
+		  <span class="stat-qty" id="stat-power-qty">0</span>
 		</div>
-		</div>
-		<h2>Activities</h2>
-		<div id="controls-activities">
+	  </div>
+	  <h2>Activities</h2>
+	  <div id="controls-activities">
 		<button id="manual-hunt" onclick="activity('hunt')">Hunt (
-			<span class="gain-qty" id="hunt-qty">0</span>
-			)</button>
+		  <span class="gain-qty" id="hunt-qty">0</span>
+		  )</button>
 		<button id="manual-fish" onclick="activity('fish')">Fish (
-			<span class="gain-qty" id="fish-qty">0</span>
-			)</button>
+		  <span class="gain-qty" id="fish-qty">0</span>
+		  )</button>
 		<button id="manual-farming" onclick="activity('farming')">Farm (
-			<span class="gain-qty" id="farming-qty">0</span>
-			)</button>
-		</div>
-		<h2>Buy</h2>
-		<div id="controls-buy">
-		</div>
-		<h2> Technologies </h2>
-		<div id="controls-tech">
-		</div >
-		<h2> Upgrades </h2>
-		<div id="controls-upgrades">
-		</div>
+		  <span class="gain-qty" id="farming-qty">0</span>
+		  )</button>
+	  </div>
+	  <h2>Buy</h2>
+	  <div id="controls-buy">
+	  </div>
+	  <h2> Technologies </h2>
+	  <div id="controls-tech">
+	  </div >
+	  <h2> Upgrades </h2>
+	  <div id="controls-upgrades">
+	  </div>
 	</div>
-	</body>
+  </body>
 </html>
