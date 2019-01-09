@@ -259,7 +259,7 @@ var gameState = {
 	  onUpgrade : function () {
 		gameState.buildings['hunter'].power *= 1.05;
 	  },
-	  alpha : 1.15,
+	  alpha : 1.5,
 	},
 	harpoons : {
 	  name : 'Harpoons',
@@ -269,7 +269,7 @@ var gameState = {
 	  onUpgrade : function() {
 		gameState.activities['fish'].energy *= 1.15;
 	  },
-	  alpha : 1.1
+	  alpha : 1.5
 	},
 	granary : {
 	  name : 'Granaries',
@@ -279,7 +279,7 @@ var gameState = {
 	  onUpgrade : function() {
 		gameState.activities['farming'].energy *= 1.20;
 	  },
-	  alpha : 1.1
+	  alpha : 1.5
 	},
 	smiths : {
 	  name : 'Smiths',
