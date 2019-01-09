@@ -5,20 +5,26 @@ var gameState = {
   year : 1,
   activities : {
 	hunt : {
-	  energy : 1
+	  energy : 1,
+	},
+	observe : {
+	  bits: 1.0e4,
 	},
 	fish : {
 	  energy : 20
 	},
 	farming : {
 	  energy : 400
+	},
+	stargaze : {
+	  bits: 1.0e7
 	}
   },
   research_tree : {
 	tool : {
 	  name : 'Tool',
 	  desc : '+ 25 % hunting power',
-	  cost : 1000,
+	  cost : { energy: 0, bits: 1e7 },
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 1.25;
 		unlock_element("upgrade-tools");
@@ -29,7 +35,7 @@ var gameState = {
 	fire : {
 	  name : 'Fire',
 	  desc : '+ 25 % hunting power',
-	  cost : 10000,
+	  cost : { energy: 0, bits: 1.5e7},
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 1.25;
 	  },
@@ -39,7 +45,7 @@ var gameState = {
 	spear : {
 	  name : 'Spear',
 	  desc : '+ 50 % hunting power, unlocks atlatl',
-	  cost : 1500,
+	  cost : { energy: 0, bits: 2.0e7},
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 1.5;
 		unlock_element("upgrade-atlatl");
@@ -50,7 +56,7 @@ var gameState = {
 	fishing : {
 	  name : 'Fishing',
 	  desc : 'unlocks fishermen',
-	  cost : 5000,
+	  cost : { energy : 0, bits: 1.0e8},
 	  onResearch : function () {
 		unlock_element("manual-fish");
 		unlock_building("fisher");
@@ -62,7 +68,7 @@ var gameState = {
 	boat : {
 	  name : 'Boats',
 	  desc : '+ 50 % fishing power',
-	  cost : 10000,
+	  cost : { bits: 1.2e8},
 	  onResearch : function () {
 		gameState.buildings['fisher'].power *= 1.5;
 	  },
@@ -72,7 +78,7 @@ var gameState = {
 	bow : {
 	  name : 'Bow',
 	  desc : '+ 100 % hunting power',
-	  cost : 30000,
+	  cost : { bits: 1.0e8},
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 2.;
 	  },
@@ -82,19 +88,49 @@ var gameState = {
 	farm : {
 	  name : 'Farming',
 	  desc : 'unlocks farms',
-	  cost : 100000,
+	  cost : { bits: 5.0e9},
 	  onResearch : function() {
 		unlock_building("farm");
 		unlock_element("manual-farming");
 		unlock_element("upgrade-granary");
 	  },
-	  prereq_of : ['husbandry', 'plough', 'mills'],
+	  prereq_of : ['husbandry', 'plough', 'mills', 'astrology'],
 	  prereq : 0,
+	},
+	astrology : {
+	  name : 'Astrology',
+	  desc : 'write horoscopes, unlocks stargazing',
+	  cost : { bits: 5.0e9},
+	  onResearch : function() {
+		unlock_element("manual-stargaze");
+	  },
+	  prereq_of : ['religion'],
+	  prereq : 0,
+	},
+	religion : {
+	  name : 'Religion',
+	  desc : 'Behold! The sacred texts! Unlocks temples',
+	  cost : { bits : 6.0e9},
+	  onResearch : function() {
+		unlock_building("temple");
+	  },
+	  prereq_of : ['theology'],
+	  prereq : 0
+	},
+	theology : {
+	  name : 'Theology',
+	  desc : 'unlocks monasteries',
+	  cost : { bits : 7.0e9},
+	  onResearch : function() {
+		unlock_building("monastery");
+	  },
+	  prereq_of : [],
+	  prereq : 0
 	},
 	plough : {
 	  name : 'Plough',
 	  desc : '+ 50 % farming power',
-	  cost : 150000,
+	  cost : { energy: 0, bits: 5.5e9},
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 1.5;
 	  },
@@ -104,7 +140,7 @@ var gameState = {
 	husbandry : {
 	  name : 'Husbandry',
 	  desc : '+ 150 % farming power',
-	  cost : 130000,
+	  cost : { energy: 0, bits: 6.0e9},
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 2.5;
 	  },
@@ -114,7 +150,7 @@ var gameState = {
 	yoke : {
 	  name : 'Yoke',
 	  desc : '+ 50 % farming power',
-	  cost : 200000,
+	  cost : { energy: 0, bits : 6.5e9},
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 1.5;
 	  },
@@ -124,7 +160,7 @@ var gameState = {
 	mills : {
 	  name : 'Mill',
 	  desc : 'unlocks mills, + 100 % farming power',
-	  cost : 100000,
+	  cost : { energy: 0, bits : 7.0e9},
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 2;
 		unlock_building('mill');
@@ -135,7 +171,7 @@ var gameState = {
 	horses : {
 	  name : 'Horses',
 	  desc : '+ 50 % mill power',
-	  cost : 200000,
+	  cost : { energy: 0, bits : 7.5e9},
 	  onResearch : function()  {
 		gameState.buildings['mill'].power *= 1.5;
 	  },
@@ -145,7 +181,7 @@ var gameState = {
 	oxen : {
 	  name : 'Oxen',
 	  desc : '+ 100 % mill power, + 500 % farming power',
-	  cost : 500000,
+	  cost : { energy: 0, bits : 8.0e9},
 	  onResearch : function() {
 		gameState.buildings['mill'].power *= 2;
 		gameState.buildings['farm'].power *= 6;
@@ -156,7 +192,7 @@ var gameState = {
 	metallurgy : {
 	  name : 'Metallurgy',
 	  desc : 'unlocks smiths',
-	  cost : 1000000,
+	  cost : { energy: 0, bits : 8.5e9},
 	  onResearch : function() {
 		unlock_element('upgrade-smiths');
 	  },
@@ -166,7 +202,7 @@ var gameState = {
 	steammachine : {
 	  name : 'Steam machine',
 	  desc : 'unlocks steam machines',
-	  cost : 10000000,
+	  cost : { energy: 0, bits: 5.0e10},
 	  onResearch : function() {
 		unlock_building('steam');
 	  },
@@ -176,7 +212,7 @@ var gameState = {
 	industry : {
 	  name : 'Industry',
 	  desc : '+ 200 % steam power, unlocks factory upgrade',
-	  cost : 25000000,
+	  cost : { energy: 0, bits: 6.5e10},
 	  onResearch : function() {
 		unlock_element('upgrade-factory');
 	  },
@@ -186,7 +222,7 @@ var gameState = {
 	electricity : {
 	  name : 'Electricity',
 	  desc : '+ 100 % steam power',
-	  cost : 50000000,
+	  cost : { energy: 0, bits: 9e10} ,
 	  onResearch : function() {
 		unlock_building('coal_plant');
 	  },
@@ -196,7 +232,7 @@ var gameState = {
 	mining : {
 	  name : 'Mining',
 	  desc : '+ 100 % coal plant power, unlocks mines upgrade',
-	  cost : 50000000,
+	  cost : {energy: 0, bits: 7e10},
 	  onResearch : function() {
 		unlock_element('upgrade-mines');
 	  },
@@ -208,7 +244,7 @@ var gameState = {
 	tools : {
 	  name : 'Tools',
 	  desc : '+ 10 % manual hunting power',
-	  cost : 500,
+	  cost : {energy: 500, bits: 0},
 	  level : 0,
 	  onUpgrade : function() {
 		gameState.activities['hunt'].energy *= 1.1;
@@ -218,7 +254,7 @@ var gameState = {
 	atlatl : {
 	  name : 'Atlatl',
 	  desc : '+ 5 % hunting power',
-	  cost : 100,
+	  cost : { energy: 100, bits: 0},
 	  level : 0,
 	  onUpgrade : function () {
 		gameState.buildings['hunter'].power *= 1.05;
@@ -228,7 +264,7 @@ var gameState = {
 	harpoons : {
 	  name : 'Harpoons',
 	  desc : '+ 15 % manual fishing power',
-	  cost : 6000,
+	  cost : {energy: 6000, bits: 0},
 	  level : 0,
 	  onUpgrade : function() {
 		gameState.activities['fish'].energy *= 1.15;
@@ -238,7 +274,7 @@ var gameState = {
 	granary : {
 	  name : 'Granaries',
 	  desc : '+ 20 % manual farming power',
-	  cost : 60000,
+	  cost : {energy: 60000, bits: 0},
 	  level : 0,
 	  onUpgrade : function() {
 		gameState.activities['farming'].energy *= 1.20;
@@ -248,7 +284,7 @@ var gameState = {
 	smiths : {
 	  name : 'Smiths',
 	  desc : '+ 5 % mill power',
-	  cost : 70000,
+	  cost : {energy: 70000, bits: 0},
 	  level : 0,
 	  onUpgrade : function() {
 		gameState.buildings['mill'].power *= 1.05;
@@ -258,7 +294,7 @@ var gameState = {
 	factory : {
 	  name : 'Factories',
 	  desc : '+ 5 % steam power',
-	  cost : 10000000,
+	  cost : {energy: 10000000},
 	  level : 0,
 	  onUpgrade : function() {
 		gameState.buildings['steam'].power *= 1.05;
@@ -268,7 +304,7 @@ var gameState = {
 	mines : {
 	  name : 'Mines',
 	  desc : '+ 5 % coal plant power',
-	  cost : 10000000,
+	  cost : {energy: 10000000},
 	  level : 0,
 	  onUpgrade : function() {
 		gameState.buildings['coal_plant'].power *= 1.05;
@@ -280,56 +316,82 @@ var gameState = {
 	hunter : {
 	  name : 'Hunters',
 	  total : 0,
-	  cost : 5,
+	  cost : {energy: 5},
 	  alpha : 1.05,
-	  power : 1
+	  power : 1,
+	  bps : 1
+	},
+	shaman : {
+	  name : 'Shamans',
+	  total : 0,
+	  cost : {energy : 100},
+	  alpha : 1.05,
+	  power : -10,
+	  bps : 1000
 	},
 	fisher : {
 	  name : 'Fishers',
 	  total : 0,
-	  cost : 750,
+	  cost : {energy: 750},
 	  alpha : 1.05,
-	  power : 5
+	  power : 5,
+	  bps : 5
 	},
 	farm : {
 	  name : 'Farms',
 	  total : 0,
-	  cost : 15000,
+	  cost : {energy: 15000},
 	  alpha : 1.07,
 	  power : 1000
+	},
+	temple : {
+	  name : 'Temple',
+	  total : 0,
+	  cost : {energy: 1e5},
+	  alpha : 1.06,
+	  power : -200,
+	  bps : 5000
+	},
+	monastery : {
+	  name : 'Monastery',
+	  total : 0,
+	  cost : {energy: 5e5},
+	  alpha : 1.06,
+	  power : -1000,
+	  bps : 10000
 	},
 	mill : {
 	  name : 'Mills',
 	  total : 0,
-	  cost : 50000,
+	  cost : {energy: 50000},
 	  alpha : 1.07,
 	  power : 5000
 	},
 	steam : {
 	  name : 'Steam machines',
 	  total : 0,
-	  cost :  1000000,
+	  cost :  {energy: 1000000},
 	  alpha : 1.05,
 	  power : 100000
 	},
 	coal_plant : {
 	  name : 'Coal plants',
 	  total : 0,
-	  cost :  1000000000,
+	  cost :  {energy: 1000000000},
 	  alpha : 1.05,
 	  power : 10000000
 	},
 	fission_plant : {
 	  name : 'Nuclear fission plants',
 	  total : 0,
-	  cost :  5000000000,
+	  cost :  {energy: 5000000000},
 	  alpha : 1.05,
 	  power : 50000000
 	},
 	fusion_plant : {
 	  name : 'Nuclear fusion plants',
 	  total : 0,
-	  cost :  10000000000,
+	  cost :  {energy: 10000000000},
 	  alpha : 1.05,
 	  power : 500000000
 	}
@@ -375,24 +437,54 @@ function initGame()
 	lock_element(resname+"-qty");
   }
   unlock_element("manual-hunt");
+  unlock_element("manual-observe");
   unlock_building("hunter");
+  unlock_building("shaman");
   updateStats();
   var interval = setInterval(tick, 1000);
 }
 
 function activity(a)
 {
-  gameState.energy += gameState.activities[a].energy;
+  var act = gameState.activities[a];
+  if (act.energy) {
+    gameState.energy += act.energy;
+  }
+  if (act.bits) {
+    gameState.bits += act.bits; 
+  }
   updateStats();
+}
+
+function tryPay(cost) {
+  var costEnergy = 0;
+  var costBits = 0;
+  if (cost.energy) {
+	costEnergy = cost.energy;
+  }
+  if (cost.bits) {
+	costBits = cost.bits;
+  }
+  if (gameState.energy >= costEnergy && gameState.bits >= costBits) {
+	gameState.energy -= costEnergy;
+	gameState.bits -= costBits;
+	return true;
+  }
+  return false;
+}
+
+function increaseCost(elm)
+{
+  elm.cost.energy *= elm.alpha;
+  elm.cost.bits *= elm.alpha;
 }
 
 function buy(b)
 {
   var building = gameState.buildings[b];
-  if (gameState.energy >= building.cost) {
-	gameState.energy -= building.cost;
+  if (tryPay(building.cost)) {
 	building.total += 1;
-	building.cost *= building.alpha;
+	increaseCost(building);
   }
   updateStats();
 }
@@ -400,9 +492,8 @@ function buy(b)
 function research(resname)
 {
   res = gameState.research_tree[resname];
-  if (gameState.energy >= res.cost) {
+  if (tryPay(res.cost)) {
 	document.getElementById("research-"+resname).remove();
-	gameState.energy -= res.cost;
 	res.onResearch();
 	for (var i = 0; i < res.prereq_of.length; i++) {
 	  var rname = res.prereq_of[i];
@@ -416,11 +507,10 @@ function research(resname)
 function upgrade(resname)
 {
   res = gameState.upgrades[resname];
-  if (gameState.energy >= res.cost) {
-	gameState.energy -= res.cost;
+  if (tryPay(res.cost)) {
 	res.onUpgrade();
-	res.cost *= res.alpha;
 	res.level += 1;
+	increaseCost(res);
   }
 }
 
@@ -463,24 +553,31 @@ function genButtons()
   }
 }
 
-function getSaganKardashevLvl(power)
+function getSaganKardashevPowerLvl(power)
 {
   return (Math.log10(power) - 6) / 10;
+}
+
+function getSaganKardashevInfoLvl(bits)
+{
+  return String.fromCharCode(Math.floor(Math.log10(bits))+'A'.charCodeAt(0));
 }
 
 function updateStats()
 {
   document.getElementById("stat-energy-qty").innerHTML = formatUnit(gameState.energy, "J");
+  document.getElementById("stat-bits-qty").innerHTML = formatUnit(gameState.bits, "b");
   document.getElementById("stat-power-qty").innerHTML = formatUnit(totalPower(), "W");
+  document.getElementById("stat-info-qty").innerHTML = formatUnit(totalInfo(), "b/s");
   document.getElementById("stat-year").innerHTML = ""+gameState.year;
-  document.getElementById("civ-level").innerHTML = getSaganKardashevLvl(totalPower()).toFixed(3);
+  document.getElementById("civ-level").innerHTML = getSaganKardashevPowerLvl(totalPower()).toFixed(3) + '-'+getSaganKardashevInfoLvl(totalInfo());
   for (var bname in gameState.buildings) {
 	var b = gameState.buildings[bname];
 	document.getElementById(bname+"-qty").innerHTML = b.total;
   }
   for (var upname in gameState.upgrades) {
 	var u = gameState.upgrades[upname];
-	document.getElementById("upgrade-"+upname+"-cost").innerHTML = formatUnit(u.cost, "J");
+	document.getElementById("upgrade-"+upname+"-cost").innerHTML = formatUnit(u.cost.energy, "J");
 	document.getElementById("upgrade-"+upname+"-level").innerHTML = u.level;
   }
   for (var resname in gameState.research_tree) {
@@ -490,7 +587,14 @@ function updateStats()
 	  if (res_button) {
 		res_button.style.visibility = "initial";
 		res_button.style.display = "";
-		document.getElementById("tech-"+resname+"-cost").innerHTML = formatUnit(res.cost, "J");
+		var d = document.getElementById("tech-"+resname+"-cost");
+		d.innerHTML = "";
+		if (res.cost.energy) {
+		  d.innerHTML += formatUnit(res.cost.energy, "J");
+		}
+		if (res.cost.bits) {
+		  d.innerHTML += ' ' + formatUnit(res.cost.bits, "b");
+		}
 	  }
 	} else {
 	  var res_button = document.getElementById("research-"+resname);
@@ -502,13 +606,40 @@ function updateStats()
   }
   for (var resname in gameState.activities) {
 	var res = gameState.activities[resname];
-	document.getElementById(resname+"-qty").innerHTML = formatUnit(res.energy, "J");
+	var d = document.getElementById(resname+"-qty");
+	d.innerHTML = "";
+	if (res.energy) {
+	  d.innerHTML += formatUnit(res.energy, "J");
+	}
+	if (res.bits) {
+	  d.innerHTML += ' ' + formatUnit(res.bits, "b");
+	}
   }
   for (var resname in gameState.buildings) {
 	var res = gameState.buildings[resname];
-	document.getElementById(resname+"-cost").innerHTML = formatUnit(res.cost, "J");
-	document.getElementById(resname+"-gain").innerHTML = formatUnit(res.power, "W");
+	document.getElementById(resname+"-cost").innerHTML = formatUnit(res.cost.energy, "J");
+	var d = document.getElementById(resname+"-gain");
+	d.innerHTML = "";
+	if (res.power) {
+	  d.innerHTML += formatUnit(res.power, "W");
+	}
+
+	if (res.bps) {
+	  d.innerHTML += ' ' + formatUnit(res.bps, "b/s");
+	}
   }
+}
+
+function totalInfo()
+{
+  var s = 0;
+  for (var bname in gameState.buildings) {
+	var building = gameState.buildings[bname];
+	if (building.bps) {
+	  s += building.total * building.bps;
+	}
+  }
+  return s;
 }
 
 function totalPower()
@@ -516,13 +647,16 @@ function totalPower()
   var s = 0;
   for (var bname in gameState.buildings) {
 	var building = gameState.buildings[bname];
-	s += building.total * building.power;
+	if (building.power) {
+	  s += building.total * building.power;
+	}
   }
   return s;
 }
 
 function tick() {
   gameState.energy += totalPower();
+  gameState.bits += totalInfo();
   gameState.year += 1;
   updateStats();
 }
