@@ -24,28 +24,78 @@ var gameState = {
 	tool : {
 	  name : 'Tool',
 	  desc : '+ 25 % hunting power',
-	  cost : { energy: 0, bits: 1e7 },
+	  cost : {bits: 1e6 },
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 1.25;
 		unlock_element("upgrade-tools");
 	  },
-	  prereq_of : ['fire', 'spear'],
+	  prereq_of : ['fire', 'spear', 'herbs'],
 	  prereq : 0,
+	},
+	herbs : {
+	  name : 'Herbs',
+	  desc : '+ 50 % shaman knowledge',
+	  cost : {bits: 1e6 },
+	  onResearch : function() {
+		gameState.buildings['shaman'].bps *= 1.5;
+	  },
+	  prereq_of : ['pigments'],
+	  prereq : 0
+	},
+	pigments : {
+	  name : 'Pigments',
+	  desc : '+ 50 % shaman knowledge',
+	  cost : {bits : 1.5e6 },
+	  onResearch : function() {
+		gameState.buildings['shaman'].bps *= 1.5;
+	  },
+	  prereq_of : ['petroglyphs'],
+	  prereq : 0
+	},
+	petroglyphs : {
+	  name : 'Petroglyphs',
+	  desc : '+ 100 % shaman knowledge',
+	  cost : {bits : 2.5e6 },
+	  onResearch : function() {
+		gameState.buildings['shaman'].bps *= 2;
+	  },
+	  prereq_of : ['animalspirit'],
+	  prereq : 0
+	},
+	animalspirit : {
+	  name : 'Animal spirits',
+	  desc : '- 25 % shaman energy consumption',
+	  cost : {bits : 5.0e6},
+	  onResearch : function() {
+		gameState.buildings['shaman'].power *= .75;
+	  },
+	  prereq_of : ['rituals'],
+	  prereq : 0
+	},
+	rituals : {
+	  name : 'Rituals',
+	  desc  : '+ 100 % hunter knowledge',
+	  cost : {bits : 1.0e7},
+	  onResearch : function() {
+		gameState.buildings['hunter'].bps *= 1.1;
+	  },
+	  prereq_of : ['religion'],
+	  prereq : 0
 	},
 	fire : {
 	  name : 'Fire',
 	  desc : '+ 25 % hunting power',
-	  cost : { energy: 0, bits: 1.5e7},
+	  cost : {bits: 1.5e7},
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 1.25;
 	  },
-	  prereq_of : ['farm'],
+	  prereq_of : ['farm', 'rituals'],
 	  prereq : 0,
 	},
 	spear : {
 	  name : 'Spear',
 	  desc : '+ 50 % hunting power, unlocks atlatl',
-	  cost : { energy: 0, bits: 2.0e7},
+	  cost : {bits: 2.0e7},
 	  onResearch : function() {
 		gameState.buildings['hunter'].power *= 1.5;
 		unlock_element("upgrade-atlatl");
@@ -56,7 +106,7 @@ var gameState = {
 	fishing : {
 	  name : 'Fishing',
 	  desc : 'unlocks fishermen',
-	  cost : { energy : 0, bits: 1.0e8},
+	  cost : {bits: 1.0e8},
 	  onResearch : function () {
 		unlock_element("manual-fish");
 		unlock_building("fisher");
@@ -94,7 +144,7 @@ var gameState = {
 		unlock_element("manual-farming");
 		unlock_element("upgrade-granary");
 	  },
-	  prereq_of : ['husbandry', 'plough', 'mills', 'astrology'],
+	  prereq_of : ['husbandry', 'plough', 'mills', 'astrology', 'writing'],
 	  prereq : 0,
 	},
 	astrology : {
@@ -117,6 +167,18 @@ var gameState = {
 	  prereq_of : ['theology'],
 	  prereq : 0
 	},
+	writing : {
+	  name : 'Writing',
+	  desc : '+ 100 % temple knowledge, - 50 % temple energy consumption, unlocks books',
+	  cost : { bits : 5e9 },
+	  onResearch : function() {
+		gameState.buildings['temple'].bps *= 2;
+		gameState.buildings['temple'].power *= .5;
+		unlock_element("upgrade-books");
+	  },
+	  prereq_of : ['theology'],
+	  prereq : 0,
+	},
 	theology : {
 	  name : 'Theology',
 	  desc : 'unlocks monasteries',
@@ -124,13 +186,33 @@ var gameState = {
 	  onResearch : function() {
 		unlock_building("monastery");
 	  },
-	  prereq_of : [],
+	  prereq_of : ['university', 'astronomy'],
+	  prereq : 0
+	},
+	university : {
+	  name : 'University',
+	  desc : 'unlocks universities',
+	  cost : { bits : 9.0e9},
+	  onResearch : function() {
+		unlock_building("university");
+	  },
+	  prereq_of : ['scientificmethod'],
+	  prereq : 0
+	},
+	scientificmethod : {
+	  name : 'Scientific Method',
+	  desc : 'university knowledge x10',
+	  cost : {bits : 1e10},
+	  onResearch : function() {
+		gameState.buildings['university'].bps *= 10;
+	  },
+	  prereq_of : ['chemistry'],
 	  prereq : 0
 	},
 	plough : {
 	  name : 'Plough',
 	  desc : '+ 50 % farming power',
-	  cost : { energy: 0, bits: 5.5e9},
+	  cost : { energy: 0, bits: 5.5e8},
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 1.5;
 	  },
@@ -140,7 +222,7 @@ var gameState = {
 	husbandry : {
 	  name : 'Husbandry',
 	  desc : '+ 150 % farming power',
-	  cost : { energy: 0, bits: 6.0e9},
+	  cost : { energy: 0, bits: 6.0e8},
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 2.5;
 	  },
@@ -150,7 +232,7 @@ var gameState = {
 	yoke : {
 	  name : 'Yoke',
 	  desc : '+ 50 % farming power',
-	  cost : { energy: 0, bits : 6.5e9},
+	  cost : { energy: 0, bits : 6.5e8},
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 1.5;
 	  },
@@ -160,7 +242,7 @@ var gameState = {
 	mills : {
 	  name : 'Mill',
 	  desc : 'unlocks mills, + 100 % farming power',
-	  cost : { energy: 0, bits : 7.0e9},
+	  cost : { energy: 0, bits : 7.0e8},
 	  onResearch : function() {
 		gameState.buildings['farm'].power *= 2;
 		unlock_building('mill');
@@ -171,7 +253,7 @@ var gameState = {
 	horses : {
 	  name : 'Horses',
 	  desc : '+ 50 % mill power',
-	  cost : { energy: 0, bits : 7.5e9},
+	  cost : { energy: 0, bits : 7.5e8},
 	  onResearch : function()  {
 		gameState.buildings['mill'].power *= 1.5;
 	  },
@@ -181,10 +263,19 @@ var gameState = {
 	oxen : {
 	  name : 'Oxen',
 	  desc : '+ 100 % mill power, + 500 % farming power',
-	  cost : { energy: 0, bits : 8.0e9},
+	  cost : { energy: 0, bits : 8.0e8},
 	  onResearch : function() {
 		gameState.buildings['mill'].power *= 2;
 		gameState.buildings['farm'].power *= 6;
+	  },
+	  prereq : 0,
+	  prereq_of : []
+	},
+	astronomy : {
+	  name : 'Astronomy',
+	  desc : 'proper understanding of the movement of the stars and planets',
+	  cost : {bits : 9e9},
+	  onResearch : function() {
 	  },
 	  prereq : 0,
 	  prereq_of : []
@@ -195,6 +286,25 @@ var gameState = {
 	  cost : { energy: 0, bits : 8.5e9},
 	  onResearch : function() {
 		unlock_element('upgrade-smiths');
+	  },
+	  prereq : 0,
+	  prereq_of : ['alchemy']
+	},
+	alchemy : {
+	  name : 'Alchemy',
+	  desc : 'try to turn lead into gold',
+	  cost : {bits : 9e9},
+	  onResearch : function() {
+	  },
+	  prereq : 0,
+	  prereq_of : ['chemistry']
+	},
+	chemistry : {
+	  name : 'Chemistry',
+	  desc : 'a better knowledge of matter',
+	  cost : {bits : 1e10},
+	  onResearch : function() {
+
 	  },
 	  prereq : 0,
 	  prereq_of : ['steammachine']
@@ -291,6 +401,15 @@ var gameState = {
 	  },
 	  alpha : 1.15
 	},
+	books : {
+	  name : 'Books',
+	  desc : '+ 5 % monastery knowledge',
+	  cost : {energy : 80000},
+	  onUpgrade : function() {
+		gameState.buildings['monastery'].bps *= 1.05;
+	  },
+	  alpha : 1.15
+	},
 	factory : {
 	  name : 'Factories',
 	  desc : '+ 5 % steam power',
@@ -359,6 +478,14 @@ var gameState = {
 	  alpha : 1.06,
 	  power : -1000,
 	  bps : 10000
+	},
+	university : {
+	  name : 'University',
+	  total : 0,
+	  cost : {energy: 1e6},
+	  alpha : 1.1,
+	  power : -5000,
+	  bps : 100000
 	},
 	mill : {
 	  name : 'Mills',
@@ -448,22 +575,22 @@ function activity(a)
 {
   var act = gameState.activities[a];
   if (act.energy) {
-    gameState.energy += act.energy;
+	gameState.energy += act.energy;
   }
   if (act.bits) {
-    gameState.bits += act.bits; 
+	gameState.bits += act.bits; 
   }
   updateStats();
 }
 
-function tryPay(cost) {
+function tryPay(cost, alpha=1, lvl=1) {
   var costEnergy = 0;
   var costBits = 0;
   if (cost.energy) {
-	costEnergy = cost.energy;
+	costEnergy = getCostVal(cost.energy);
   }
   if (cost.bits) {
-	costBits = cost.bits;
+	costBits = getCostVal(cost.bits);
   }
   if (gameState.energy >= costEnergy && gameState.bits >= costBits) {
 	gameState.energy -= costEnergy;
@@ -471,6 +598,10 @@ function tryPay(cost) {
 	return true;
   }
   return false;
+}
+
+function getCostVal(val, alpha, lvl) {
+  return val * pow(alpha, lvl);
 }
 
 function increaseCost(elm)
@@ -485,8 +616,8 @@ function buy(b)
   if (tryPay(building.cost)) {
 	building.total += 1;
 	increaseCost(building);
+	updateStats();
   }
-  updateStats();
 }
 
 function research(resname)
@@ -507,10 +638,11 @@ function research(resname)
 function upgrade(resname)
 {
   res = gameState.upgrades[resname];
-  if (tryPay(res.cost)) {
+  if (tryPay(res.cost, res.alpha, res.level)) {
 	res.onUpgrade();
 	res.level += 1;
 	increaseCost(res);
+	updateStats();
   }
 }
 
@@ -533,7 +665,7 @@ function genButtons()
 	  'cost <span class="cost-qty" id="'+bname+'-cost">0</span>'+
 	  ', generates <span class="gain-qty" id="'+bname+'-gain">0</span> '+
 	  '<button onclick="buy(\''+bname+'\');">Buy</button>'
-	  '</div>'
+	'</div>'
   }
   for (var tname in gameState.research_tree) {
 	var tech = gameState.research_tree[tname];
