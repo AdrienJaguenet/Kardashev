@@ -138,7 +138,7 @@ var gameState = {
 	farm : {
 	  name : 'Farming',
 	  desc : 'unlocks farms',
-	  cost : { bits: 5.0e9},
+	  cost : { bits: 5.0e8},
 	  onResearch : function() {
 		unlock_building("farm");
 		unlock_element("manual-farming");
@@ -150,7 +150,7 @@ var gameState = {
 	astrology : {
 	  name : 'Astrology',
 	  desc : 'write horoscopes, unlocks stargazing',
-	  cost : { bits: 5.0e9},
+	  cost : { bits: 5.0e8},
 	  onResearch : function() {
 		unlock_element("manual-stargaze");
 	  },
@@ -160,7 +160,7 @@ var gameState = {
 	religion : {
 	  name : 'Religion',
 	  desc : 'Behold! The sacred texts! Unlocks temples',
-	  cost : { bits : 6.0e9},
+	  cost : { bits : 6.0e8},
 	  onResearch : function() {
 		unlock_building("temple");
 	  },
@@ -170,7 +170,7 @@ var gameState = {
 	writing : {
 	  name : 'Writing',
 	  desc : '+ 100 % temple knowledge, - 50 % temple energy consumption, unlocks books',
-	  cost : { bits : 5e9 },
+	  cost : { bits : 5e8 },
 	  onResearch : function() {
 		gameState.buildings['temple'].bps *= 2;
 		gameState.buildings['temple'].power *= .5;
@@ -182,7 +182,7 @@ var gameState = {
 	theology : {
 	  name : 'Theology',
 	  desc : 'unlocks monasteries',
-	  cost : { bits : 7.0e9},
+	  cost : { bits : 7.0e8},
 	  onResearch : function() {
 		unlock_building("monastery");
 	  },
@@ -192,7 +192,7 @@ var gameState = {
 	university : {
 	  name : 'University',
 	  desc : 'unlocks universities',
-	  cost : { bits : 9.0e9},
+	  cost : { bits : 2.0e9},
 	  onResearch : function() {
 		unlock_building("university");
 	  },
@@ -436,7 +436,7 @@ var gameState = {
 	  name : 'Hunters',
 	  total : 0,
 	  cost : {energy: 5},
-	  alpha : 1.05,
+	  alpha : 1.04,
 	  power : 1,
 	  bps : 1
 	},
@@ -446,7 +446,7 @@ var gameState = {
 	  cost : {energy : 100},
 	  alpha : 1.05,
 	  power : -10,
-	  bps : 1000
+	  bps : 2e4
 	},
 	fisher : {
 	  name : 'Fishers',
@@ -469,7 +469,7 @@ var gameState = {
 	  cost : {energy: 1e5},
 	  alpha : 1.06,
 	  power : -200,
-	  bps : 5000
+	  bps : 1e6
 	},
 	monastery : {
 	  name : 'Monastery',
@@ -477,7 +477,7 @@ var gameState = {
 	  cost : {energy: 5e5},
 	  alpha : 1.06,
 	  power : -1000,
-	  bps : 10000
+	  bps : 1e5
 	},
 	university : {
 	  name : 'University',
@@ -583,14 +583,14 @@ function activity(a)
   updateStats();
 }
 
-function tryPay(cost, alpha=1, lvl=1) {
+function tryPay(cost, alpha=1, lvl=0) {
   var costEnergy = 0;
   var costBits = 0;
   if (cost.energy) {
-	costEnergy = getCostVal(cost.energy);
+	costEnergy = getCostVal(cost.energy, alpha, lvl);
   }
   if (cost.bits) {
-	costBits = getCostVal(cost.bits);
+	costBits = getCostVal(cost.bits, alpha, lvl);
   }
   if (gameState.energy >= costEnergy && gameState.bits >= costBits) {
 	gameState.energy -= costEnergy;
@@ -601,21 +601,14 @@ function tryPay(cost, alpha=1, lvl=1) {
 }
 
 function getCostVal(val, alpha, lvl) {
-  return val * pow(alpha, lvl);
-}
-
-function increaseCost(elm)
-{
-  elm.cost.energy *= elm.alpha;
-  elm.cost.bits *= elm.alpha;
+  return val * Math.pow(alpha, lvl);
 }
 
 function buy(b)
 {
   var building = gameState.buildings[b];
-  if (tryPay(building.cost)) {
+  if (tryPay(building.cost, building.alpha, building.total)) {
 	building.total += 1;
-	increaseCost(building);
 	updateStats();
   }
 }
@@ -641,7 +634,6 @@ function upgrade(resname)
   if (tryPay(res.cost, res.alpha, res.level)) {
 	res.onUpgrade();
 	res.level += 1;
-	increaseCost(res);
 	updateStats();
   }
 }
@@ -709,7 +701,7 @@ function updateStats()
   }
   for (var upname in gameState.upgrades) {
 	var u = gameState.upgrades[upname];
-	document.getElementById("upgrade-"+upname+"-cost").innerHTML = formatUnit(u.cost.energy, "J");
+	document.getElementById("upgrade-"+upname+"-cost").innerHTML = formatUnit(getCostVal(u.cost.energy, u.alpha, u.level), "J");
 	document.getElementById("upgrade-"+upname+"-level").innerHTML = u.level;
   }
   for (var resname in gameState.research_tree) {
@@ -749,7 +741,7 @@ function updateStats()
   }
   for (var resname in gameState.buildings) {
 	var res = gameState.buildings[resname];
-	document.getElementById(resname+"-cost").innerHTML = formatUnit(res.cost.energy, "J");
+	document.getElementById(resname+"-cost").innerHTML = formatUnit(getCostVal(res.cost.energy, res.alpha, res.total), "J");
 	var d = document.getElementById(resname+"-gain");
 	d.innerHTML = "";
 	if (res.power) {
