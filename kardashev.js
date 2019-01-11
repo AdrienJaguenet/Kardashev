@@ -1,7 +1,9 @@
 
 var gameState = {
-  energy : 0,
-  bits : 0,
+  resources : {
+    energy : 0,
+	bits : 0,
+  },
   year : 1,
   activities : {
 	hunt : {
@@ -542,8 +544,22 @@ function unlock_building(bname) {
   unlock_element("stat-"+bname);
 }
 
+function loadGame(gs) 
+{
+  for (var bname in gs.buildings) {
+	gameState.buildings[bname].total = gs.buildings[bname].total;
+  }
+}
+
 function initGame()
 {
+  if (typeof(Storage) != 'undefined') {
+	var gs = localStorage.getItem("gameState");
+	if (gs) {
+	  loadGame(gs);
+	}
+  }
+
   genButtons();
   for (resname in gameState.research_tree) {
 	var res = gameState.research_tree[resname];
@@ -576,10 +592,10 @@ function activity(a)
 {
   var act = gameState.activities[a];
   if (act.energy) {
-	gameState.energy += act.energy;
+	gameState.resources.energy += act.energy;
   }
   if (act.bits) {
-	gameState.bits += act.bits; 
+	gameState.resources.bits += act.bits; 
   }
   updateStats();
 }
@@ -593,9 +609,9 @@ function tryPay(cost, alpha=1, lvl=0) {
   if (cost.bits) {
 	costBits = getCostVal(cost.bits, alpha, lvl);
   }
-  if (gameState.energy >= costEnergy && gameState.bits >= costBits) {
-	gameState.energy -= costEnergy;
-	gameState.bits -= costBits;
+  if (gameState.resources.energy >= costEnergy && gameState.resources.bits >= costBits) {
+	gameState.resources.energy -= costEnergy;
+	gameState.resources.bits -= costBits;
 	return true;
   }
   return false;
@@ -690,8 +706,8 @@ function getSaganKardashevInfoLvl(bits)
 
 function updateStats()
 {
-  document.getElementById("stat-energy-qty").innerHTML = formatUnit(gameState.energy, "J");
-  document.getElementById("stat-bits-qty").innerHTML = formatUnit(gameState.bits, "b");
+  document.getElementById("stat-energy-qty").innerHTML = formatUnit(gameState.resources.energy, "J");
+  document.getElementById("stat-bits-qty").innerHTML = formatUnit(gameState.resources.bits, "b");
   document.getElementById("stat-power-qty").innerHTML = formatUnit(totalPower(), "W");
   document.getElementById("stat-info-qty").innerHTML = formatUnit(totalInfo(), "b/s");
   document.getElementById("stat-year").innerHTML = ""+gameState.year;
@@ -780,8 +796,8 @@ function totalPower()
 }
 
 function tick() {
-  gameState.energy += totalPower();
-  gameState.bits += totalInfo();
+  gameState.resources.energy += totalPower();
+  gameState.resources.bits += totalInfo();
   gameState.year += 1;
   updateStats();
 }
