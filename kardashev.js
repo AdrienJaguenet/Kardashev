@@ -405,6 +405,7 @@ var gameState = {
 	  name : 'Books',
 	  desc : '+ 5 % monastery knowledge',
 	  cost : {energy : 80000},
+	  level : 0,
 	  onUpgrade : function() {
 		gameState.buildings['monastery'].bps *= 1.05;
 	  },
