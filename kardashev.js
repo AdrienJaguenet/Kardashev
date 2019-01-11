@@ -28,7 +28,7 @@ var gameState = {
 	  desc : '+ 25 % hunting power',
 	  cost : {bits: 1e6 },
 	  onResearch : function() {
-		gameState.buildings['hunter'].power *= 1.25;
+		gameState.buildings['hunter'].genmod.energy *= 1.25;
 		unlock_element("upgrade-tools");
 	  },
 	  prereq_of : ['fire', 'spear', 'herbs'],
@@ -39,7 +39,7 @@ var gameState = {
 	  desc : '+ 50 % shaman knowledge',
 	  cost : {bits: 1e6 },
 	  onResearch : function() {
-		gameState.buildings['shaman'].bps *= 1.5;
+		gameState.buildings['shaman'].genmod.bits*= 1.5;
 	  },
 	  prereq_of : ['pigments'],
 	  prereq : 0
@@ -49,7 +49,7 @@ var gameState = {
 	  desc : '+ 50 % shaman knowledge',
 	  cost : {bits : 1.5e6 },
 	  onResearch : function() {
-		gameState.buildings['shaman'].bps *= 1.5;
+		gameState.buildings['shaman'].genmod.bits*= 1.5;
 	  },
 	  prereq_of : ['petroglyphs'],
 	  prereq : 0
@@ -59,7 +59,7 @@ var gameState = {
 	  desc : '+ 100 % shaman knowledge',
 	  cost : {bits : 2.5e6 },
 	  onResearch : function() {
-		gameState.buildings['shaman'].bps *= 2;
+		gameState.buildings['shaman'].genmod.bits *= 2;
 	  },
 	  prereq_of : ['animalspirit'],
 	  prereq : 0
@@ -69,7 +69,7 @@ var gameState = {
 	  desc : '- 25 % shaman energy consumption',
 	  cost : {bits : 5.0e6},
 	  onResearch : function() {
-		gameState.buildings['shaman'].power *= .75;
+		gameState.buildings['shaman'].genmod.energy *= .75;
 	  },
 	  prereq_of : ['rituals'],
 	  prereq : 0
@@ -79,7 +79,7 @@ var gameState = {
 	  desc  : '+ 100 % hunter knowledge',
 	  cost : {bits : 1.0e7},
 	  onResearch : function() {
-		gameState.buildings['hunter'].bps *= 1.1;
+		gameState.buildings['hunter'].genmod.bits *= 1.1;
 	  },
 	  prereq_of : ['religion'],
 	  prereq : 0
@@ -89,7 +89,7 @@ var gameState = {
 	  desc : '+ 25 % hunting power',
 	  cost : {bits: 1.5e7},
 	  onResearch : function() {
-		gameState.buildings['hunter'].power *= 1.25;
+		gameState.buildings['hunter'].genmod.energy *= 1.25;
 	  },
 	  prereq_of : ['farm', 'rituals'],
 	  prereq : 0,
@@ -99,7 +99,7 @@ var gameState = {
 	  desc : '+ 50 % hunting power, unlocks atlatl',
 	  cost : {bits: 2.0e7},
 	  onResearch : function() {
-		gameState.buildings['hunter'].power *= 1.5;
+		gameState.buildings['hunter'].genmod.energy *= 1.5;
 		unlock_element("upgrade-atlatl");
 	  },
 	  prereq_of : ['bow', 'fishing'],
@@ -122,7 +122,7 @@ var gameState = {
 	  desc : '+ 50 % fishing power',
 	  cost : { bits: 1.2e8},
 	  onResearch : function () {
-		gameState.buildings['fisher'].power *= 1.5;
+		gameState.buildings['fisher'].genmod.energy *= 1.5;
 	  },
 	  prereq_of : [],
 	  prereq : 0,
@@ -132,7 +132,7 @@ var gameState = {
 	  desc : '+ 100 % hunting power',
 	  cost : { bits: 1.0e8},
 	  onResearch : function() {
-		gameState.buildings['hunter'].power *= 2.;
+		gameState.buildings['hunter'].genmod.energy *= 2.;
 	  },
 	  prereq_of : ['farm'],
 	  prereq : 0,
@@ -174,8 +174,8 @@ var gameState = {
 	  desc : '+ 100 % temple knowledge, - 50 % temple energy consumption, unlocks books',
 	  cost : { bits : 5e8 },
 	  onResearch : function() {
-		gameState.buildings['temple'].bps *= 2;
-		gameState.buildings['temple'].power *= .5;
+		gameState.buildings['temple'].genmod.bits *= 2;
+		gameState.buildings['temple'].genmod.energy *= .5;
 		unlock_element("upgrade-books");
 	  },
 	  prereq_of : ['theology'],
@@ -206,7 +206,7 @@ var gameState = {
 	  desc : 'university knowledge x10',
 	  cost : {bits : 1e10},
 	  onResearch : function() {
-		gameState.buildings['university'].bps *= 10;
+		gameState.buildings['university'].genmod.bits *= 10;
 	  },
 	  prereq_of : ['chemistry'],
 	  prereq : 0
@@ -216,7 +216,7 @@ var gameState = {
 	  desc : '+ 50 % farming power',
 	  cost : { energy: 0, bits: 5.5e8},
 	  onResearch : function() {
-		gameState.buildings['farm'].power *= 1.5;
+		gameState.buildings['farm'].genmod.energy*= 1.5;
 	  },
 	  prereq : 0,
 	  prereq_of : []
@@ -226,7 +226,7 @@ var gameState = {
 	  desc : '+ 150 % farming power',
 	  cost : { energy: 0, bits: 6.0e8},
 	  onResearch : function() {
-		gameState.buildings['farm'].power *= 2.5;
+		gameState.buildings['farm'].genmod.energy*= 2.5;
 	  },
 	  prereq : 0,
 	  prereq_of : ['yoke', 'horses', 'oxen']
@@ -236,7 +236,7 @@ var gameState = {
 	  desc : '+ 50 % farming power',
 	  cost : { energy: 0, bits : 6.5e8},
 	  onResearch : function() {
-		gameState.buildings['farm'].power *= 1.5;
+		gameState.buildings['farm'].genmod.energy*= 1.5;
 	  },
 	  prereq : 0,
 	  prereq_of : []
@@ -246,7 +246,7 @@ var gameState = {
 	  desc : 'unlocks mills, + 100 % farming power',
 	  cost : { energy: 0, bits : 7.0e8},
 	  onResearch : function() {
-		gameState.buildings['farm'].power *= 2;
+		gameState.buildings['farm'].genmod.energy *= 2;
 		unlock_building('mill');
 	  },
 	  prereq : 0,
@@ -257,7 +257,7 @@ var gameState = {
 	  desc : '+ 50 % mill power',
 	  cost : { energy: 0, bits : 7.5e8},
 	  onResearch : function()  {
-		gameState.buildings['mill'].power *= 1.5;
+		gameState.buildings['mill'].genmod.energy *= 1.5;
 	  },
 	  prereq : 0,
 	  prereq_of : []
@@ -267,8 +267,8 @@ var gameState = {
 	  desc : '+ 100 % mill power, + 500 % farming power',
 	  cost : { energy: 0, bits : 8.0e8},
 	  onResearch : function() {
-		gameState.buildings['mill'].power *= 2;
-		gameState.buildings['farm'].power *= 6;
+		gameState.buildings['mill'].genmod.energy *= 2;
+		gameState.buildings['farm'].genmod.energy *= 6;
 	  },
 	  prereq : 0,
 	  prereq_of : []
@@ -357,7 +357,6 @@ var gameState = {
 	  name : 'Tools',
 	  desc : '+ 10 % manual hunting power',
 	  cost : {energy: 500, bits: 0},
-	  level : 0,
 	  onUpgrade : function() {
 		gameState.activities['hunt'].energy *= 1.1;
 	  },
@@ -367,9 +366,8 @@ var gameState = {
 	  name : 'Atlatl',
 	  desc : '+ 5 % hunting power',
 	  cost : { energy: 100, bits: 0},
-	  level : 0,
 	  onUpgrade : function () {
-		gameState.buildings['hunter'].power *= 1.05;
+		gameState.buildings['hunter'].genmod.energy*= 1.05;
 	  },
 	  alpha : 1.5,
 	},
@@ -377,7 +375,6 @@ var gameState = {
 	  name : 'Harpoons',
 	  desc : '+ 15 % manual fishing power',
 	  cost : {energy: 6000, bits: 0},
-	  level : 0,
 	  onUpgrade : function() {
 		gameState.activities['fish'].energy *= 1.15;
 	  },
@@ -387,7 +384,6 @@ var gameState = {
 	  name : 'Granaries',
 	  desc : '+ 20 % manual farming power',
 	  cost : {energy: 60000, bits: 0},
-	  level : 0,
 	  onUpgrade : function() {
 		gameState.activities['farming'].energy *= 1.20;
 	  },
@@ -397,9 +393,8 @@ var gameState = {
 	  name : 'Smiths',
 	  desc : '+ 5 % mill power',
 	  cost : {energy: 70000, bits: 0},
-	  level : 0,
 	  onUpgrade : function() {
-		gameState.buildings['mill'].power *= 1.05;
+		gameState.buildings['mill'].genmod.energy *= 1.05;
 	  },
 	  alpha : 1.15
 	},
@@ -407,9 +402,8 @@ var gameState = {
 	  name : 'Books',
 	  desc : '+ 5 % monastery knowledge',
 	  cost : {energy : 80000},
-	  level : 0,
 	  onUpgrade : function() {
-		gameState.buildings['monastery'].bps *= 1.05;
+		gameState.buildings['monastery'].genmod.bits *= 1.05;
 	  },
 	  alpha : 1.15
 	},
@@ -417,9 +411,8 @@ var gameState = {
 	  name : 'Factories',
 	  desc : '+ 5 % steam power',
 	  cost : {energy: 10000000},
-	  level : 0,
 	  onUpgrade : function() {
-		gameState.buildings['steam'].power *= 1.05;
+		gameState.buildings['steam'].genmod.energy *= 1.05;
 	  },
 	  alpha : 1.15
 	},
@@ -427,9 +420,8 @@ var gameState = {
 	  name : 'Mines',
 	  desc : '+ 5 % coal plant power',
 	  cost : {energy: 10000000},
-	  level : 0,
 	  onUpgrade : function() {
-		gameState.buildings['coal_plant'].power *= 1.05;
+		gameState.buildings['coal_plant'].genmod.energy *= 1.05;
 	  },
 	  alpha : 1.15
 	}
@@ -437,93 +429,105 @@ var gameState = {
   buildings : {
 	hunter : {
 	  name : 'Hunters',
-	  total : 0,
 	  cost : {energy: 5},
 	  alpha : 1.04,
-	  power : 1,
-	  bps : 1
+	  gen : {
+		energy : 1,
+		bits : 1
+	  },
 	},
 	shaman : {
 	  name : 'Shamans',
-	  total : 0,
 	  cost : {energy : 100},
 	  alpha : 1.05,
-	  power : -10,
-	  bps : 2e4
+	  gen : {
+		energy : -10,
+		bits : 2e4
+	  },
 	},
 	fisher : {
 	  name : 'Fishers',
-	  total : 0,
 	  cost : {energy: 750},
 	  alpha : 1.05,
-	  power : 5,
-	  bps : 5
+	  gen : {
+		energy: 5,
+		bits : 5
+	  }
 	},
 	farm : {
 	  name : 'Farms',
-	  total : 0,
 	  cost : {energy: 15000},
 	  alpha : 1.07,
-	  power : 1000
+	  gen : {
+		energy : 1000
+	  }
 	},
 	temple : {
 	  name : 'Temple',
-	  total : 0,
 	  cost : {energy: 1e5},
 	  alpha : 1.06,
-	  power : -200,
-	  bps : 1e6
+	  gen : {
+		energy : -200,
+		bits : 1e6
+	  }
 	},
 	monastery : {
 	  name : 'Monastery',
-	  total : 0,
 	  cost : {energy: 5e5},
 	  alpha : 1.06,
-	  power : -1000,
-	  bps : 1e5
+	  gen : {
+		energy : -1000,
+		bits : 1e5
+	  }
 	},
 	university : {
 	  name : 'University',
-	  total : 0,
 	  cost : {energy: 1e6},
 	  alpha : 1.1,
-	  power : -5000,
-	  bps : 100000
+	  gen : {
+		energy : -5000,
+		bits : 100000
+	  }
 	},
 	mill : {
 	  name : 'Mills',
-	  total : 0,
 	  cost : {energy: 50000},
 	  alpha : 1.07,
-	  power : 5000
+	  gen : {
+		energy : 5000
+	  }
 	},
 	steam : {
 	  name : 'Steam machines',
-	  total : 0,
 	  cost :  {energy: 1000000},
 	  alpha : 1.05,
-	  power : 100000
+	  gen : {
+		energy : 100000
+	  }
 	},
 	coal_plant : {
 	  name : 'Coal plants',
-	  total : 0,
 	  cost :  {energy: 1000000000},
 	  alpha : 1.05,
-	  power : 10000000
+	  gen : {
+		energy : 10000000
+	  }
 	},
 	fission_plant : {
 	  name : 'Nuclear fission plants',
-	  total : 0,
 	  cost :  {energy: 5000000000},
 	  alpha : 1.05,
-	  power : 50000000
+	  gen : {
+		energy : 50000000
+	  }
 	},
 	fusion_plant : {
 	  name : 'Nuclear fusion plants',
-	  total : 0,
 	  cost :  {energy: 10000000000},
 	  alpha : 1.05,
-	  power : 500000000
+	  gen : {
+		energy : 500000000
+	  }
 	}
   }
 };
@@ -546,29 +550,45 @@ function unlock_building(bname) {
 
 function loadGame(gs) 
 {
+  console.log("Loading game...");
+  gameState.years = gs.years;
+  console.log("-- resources")
+  for (var resname in gs.resources) {
+	console.log("")
+	gameState.resources[resname] = gs.resources[resname];
+  }
   for (var bname in gs.buildings) {
+  console.log("-- buildings...")
 	gameState.buildings[bname].total = gs.buildings[bname].total;
+	for (var resname in gs.resources) {
+	  gameState.buildings[bname].genmod = gs.buildings[bname].genmod;
+	}
+  }
+}
+
+function saveGame()
+{
+  if (typeof(Storage) != 'undefined') {
+	localStorage.setItem("gameState", gameState);
   }
 }
 
 function initGame()
 {
-  if (typeof(Storage) != 'undefined') {
-	var gs = localStorage.getItem("gameState");
-	if (gs) {
-	  loadGame(gs);
-	}
-  }
-
   genButtons();
   for (resname in gameState.research_tree) {
 	var res = gameState.research_tree[resname];
 	for (var i = 0; i < res.prereq_of.length; i++) {
 	  var r = gameState.research_tree[res.prereq_of[i]];
-	  r.prereq += 1;
+	  if (r.prereq) {
+		r.prereq += 1;
+	  } else {
+		r.prereq = 1;
+	  }
 	}
   }
   for (resname in gameState.upgrades) {
+	gameState.upgrades[resname].level = 0;
 	lock_element("upgrade-"+resname);
   }
   for (resname in gameState.activities) {
@@ -576,6 +596,11 @@ function initGame()
   }
 
   for (resname in gameState.buildings) {
+	gameState.buildings[resname].genmod = {};
+	for (rname in gameState.resources) {
+	  gameState.buildings[resname].genmod[rname] = 1;
+	}
+	gameState.buildings[resname].total = 0;
 	lock_element("buy-"+resname);
 	lock_element("stat-"+resname);
 	lock_element(resname+"-qty");
@@ -584,8 +609,14 @@ function initGame()
   unlock_element("manual-observe");
   unlock_building("hunter");
   unlock_building("shaman");
+  if (typeof(Storage) != 'undefined') {
+	var gs = localStorage.getItem("gameState");
+	loadGame(gs);
+  }
+
   updateStats();
-  var interval = setInterval(tick, 1000);
+  var interval_tick = setInterval(tick, 1000);
+  var interval_save = setInterval(saveGame, 5000);
 }
 
 function activity(a)
@@ -761,12 +792,12 @@ function updateStats()
 	document.getElementById(resname+"-cost").innerHTML = formatUnit(getCostVal(res.cost.energy, res.alpha, res.total), "J");
 	var d = document.getElementById(resname+"-gain");
 	d.innerHTML = "";
-	if (res.power) {
-	  d.innerHTML += formatUnit(res.power, "W");
+	if (res.gen.energy) {
+	  d.innerHTML += formatUnit(res.gen.energy * res.genmod.energy, "W");
 	}
 
-	if (res.bps) {
-	  d.innerHTML += ' ' + formatUnit(res.bps, "b/s");
+	if (res.gen.bits) {
+	  d.innerHTML += ' ' + formatUnit(res.gen.bits * res.genmod.bits, "b/s");
 	}
   }
 }
@@ -776,8 +807,8 @@ function totalInfo()
   var s = 0;
   for (var bname in gameState.buildings) {
 	var building = gameState.buildings[bname];
-	if (building.bps) {
-	  s += building.total * building.bps;
+	if (building.gen.bits) {
+	  s += building.total * building.gen.bits * building.genmod.energy;
 	}
   }
   return s;
@@ -788,8 +819,8 @@ function totalPower()
   var s = 0;
   for (var bname in gameState.buildings) {
 	var building = gameState.buildings[bname];
-	if (building.power) {
-	  s += building.total * building.power;
+	if (building.gen.energy) {
+	  s += building.total * building.gen.energy * building.genmod.energy;
 	}
   }
   return s;
