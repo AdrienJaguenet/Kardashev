@@ -29,7 +29,7 @@ var gameState = {
 	  cost : {bits: 1e6 },
 	  onResearch : function() {
 		gameState.buildings['hunter'].genmod.energy *= 1.25;
-		unlock_element("upgrade-tools");
+		unlock_upgrade('tools');
 	  },
 	  prereq_of : ['fire', 'spear', 'herbs'],
 	  prereq : 0,
@@ -100,7 +100,7 @@ var gameState = {
 	  cost : {bits: 2.0e7},
 	  onResearch : function() {
 		gameState.buildings['hunter'].genmod.energy *= 1.5;
-		unlock_element("upgrade-atlatl");
+		unlock_upgrade('atlatl');
 	  },
 	  prereq_of : ['bow', 'fishing'],
 	  prereq : 0,
@@ -110,9 +110,9 @@ var gameState = {
 	  desc : 'unlocks fishermen',
 	  cost : {bits: 1.0e8},
 	  onResearch : function () {
-		unlock_element("manual-fish");
+		unlock_activity('fish');
 		unlock_building("fisher");
-		unlock_element("upgrade-harpoons");
+		unlock_upgrade('harpoons');
 	  },
 	  prereq_of : ['boat'],
 	  prereq : 0,
@@ -143,8 +143,8 @@ var gameState = {
 	  cost : { bits: 5.0e8},
 	  onResearch : function() {
 		unlock_building("farm");
-		unlock_element("manual-farming");
-		unlock_element("upgrade-granary");
+		unlock_activity('farming');
+		unlock_upgrade('granary');
 	  },
 	  prereq_of : ['husbandry', 'plough', 'mills', 'astrology', 'writing'],
 	  prereq : 0,
@@ -154,7 +154,7 @@ var gameState = {
 	  desc : 'write horoscopes, unlocks stargazing',
 	  cost : { bits: 5.0e8},
 	  onResearch : function() {
-		unlock_element("manual-stargaze");
+		unlock_activity('stargaze');
 	  },
 	  prereq_of : ['religion'],
 	  prereq : 0,
@@ -176,7 +176,7 @@ var gameState = {
 	  onResearch : function() {
 		gameState.buildings['temple'].genmod.bits *= 2;
 		gameState.buildings['temple'].genmod.energy *= .5;
-		unlock_element("upgrade-books");
+		unlock_upgrade('books');
 	  },
 	  prereq_of : ['theology'],
 	  prereq : 0,
@@ -287,7 +287,7 @@ var gameState = {
 	  desc : 'unlocks smiths',
 	  cost : { energy: 0, bits : 8.5e9},
 	  onResearch : function() {
-		unlock_element('upgrade-smiths');
+		unlock_upgrade('smiths');
 	  },
 	  prereq : 0,
 	  prereq_of : ['alchemy']
@@ -326,7 +326,7 @@ var gameState = {
 	  desc : '+ 200 % steam power, unlocks factory upgrade',
 	  cost : { energy: 0, bits: 6.5e10},
 	  onResearch : function() {
-		unlock_element('upgrade-factory');
+		unlock_upgrade('factory');
 	  },
 	  prereq : 0,
 	  prereq_of : ['electricity', 'mining']
@@ -346,7 +346,7 @@ var gameState = {
 	  desc : '+ 100 % coal plant power, unlocks mines upgrade',
 	  cost : {energy: 0, bits: 7e10},
 	  onResearch : function() {
-		unlock_element('upgrade-mines');
+		unlock_upgrade('mines');
 	  },
 	  prereq : 0,
 	  prereq_of : []
@@ -358,7 +358,7 @@ var gameState = {
 	  desc : '+ 10 % manual hunting power',
 	  cost : {energy: 500, bits: 0},
 	  onUpgrade : function() {
-		gameState.activities['hunt'].energy *= 1.1;
+		gameState.activities['hunt'].genmod.energy *= 1.1;
 	  },
 	  alpha : 1.2
 	},
@@ -376,7 +376,7 @@ var gameState = {
 	  desc : '+ 15 % manual fishing power',
 	  cost : {energy: 6000, bits: 0},
 	  onUpgrade : function() {
-		gameState.activities['fish'].energy *= 1.15;
+		gameState.activities['fish'].genmod.energy *= 1.15;
 	  },
 	  alpha : 1.5
 	},
@@ -385,7 +385,7 @@ var gameState = {
 	  desc : '+ 20 % manual farming power',
 	  cost : {energy: 60000, bits: 0},
 	  onUpgrade : function() {
-		gameState.activities['farming'].energy *= 1.20;
+		gameState.activities['farming'].genmod.energy *= 1.20;
 	  },
 	  alpha : 1.5
 	},
@@ -543,33 +543,75 @@ function lock_element(elmname) {
 }
 
 function unlock_building(bname) {
+  gameState.buildings[bname].unlocked = true;
   unlock_element(bname+"-qty");
   unlock_element("buy-"+bname);
   unlock_element("stat-"+bname);
+}
+
+function unlock_upgrade(bname) {
+  gameState.upgrades[bname].unlocked = true;
+  unlock_element("upgrade-"+bname);
+}
+
+function unlock_activity(actname) {
+  gameState.activities[actname].unlocked = true;
+  unlock_element("manual-"+actname);
 }
 
 function loadGame(gs) 
 {
   console.log("Loading game...");
   gameState.years = gs.years;
-  console.log("-- resources")
+  console.log("-- resources");
   for (var resname in gs.resources) {
-	console.log("")
 	gameState.resources[resname] = gs.resources[resname];
   }
   for (var bname in gs.buildings) {
-  console.log("-- buildings...")
+	console.log("-- buildings")
+	if (gs.buildings[bname].unlocked) {
+	  gameState.buildings[bname].unlocked = true;
+	  unlock_building(bname);
+	}
 	gameState.buildings[bname].total = gs.buildings[bname].total;
 	for (var resname in gs.resources) {
-	  gameState.buildings[bname].genmod = gs.buildings[bname].genmod;
+	  gameState.buildings[bname].genmod[resname] = gs.buildings[bname].genmod[resname];
+	}
+  }
+  console.log("-- techs")
+  for (var techname in gs.research_tree) {
+	gameState.research_tree[techname].prereq = gs.research_tree[techname].prereq;
+	if (gs.research_tree[techname].researched) {
+	  gameState.research_tree[techname].researched = true;
+	}
+  }
+  
+  console.log("-- upgrades")
+  for (var upname in gs.upgrades) {
+	if (gs.upgrades[upname].unlocked) {
+	  gameState.upgrades[upname].unlocked = true;
+	  unlock_upgrade(upname);
+	}
+	gameState.upgrades[upname].level = gs.upgrades[upname].level;
+  }
+  
+  console.log("-- activities")
+  for (var actname in gs.activities) {
+	if (gs.activities[actname].unlocked) {
+	  gameState.activities[actname].unlocked = true;
+	  unlock_activity(actname);
+	}
+	for (var resname in gs.resources) {
+	  gameState.activities[actname].genmod[resname] = gs.activities[actname].genmod[resname];
 	}
   }
 }
 
 function saveGame()
 {
+  console.log("Saving game...");
   if (typeof(Storage) != 'undefined') {
-	localStorage.setItem("gameState", gameState);
+	localStorage.setItem("gameState", JSON.stringify(gameState));
   }
 }
 
@@ -585,6 +627,12 @@ function initGame()
 	  } else {
 		r.prereq = 1;
 	  }
+	}
+  }
+  for (actname in gameState.activities) {
+	gameState.activities[actname].genmod = {}
+	for (resname in gameState.resources) {
+	  gameState.activities[actname].genmod[resname] = 1;
 	}
   }
   for (resname in gameState.upgrades) {
@@ -605,13 +653,15 @@ function initGame()
 	lock_element("stat-"+resname);
 	lock_element(resname+"-qty");
   }
-  unlock_element("manual-hunt");
-  unlock_element("manual-observe");
+  unlock_activity('hunt');
+  unlock_activity('observe');
   unlock_building("hunter");
   unlock_building("shaman");
   if (typeof(Storage) != 'undefined') {
 	var gs = localStorage.getItem("gameState");
-	loadGame(gs);
+	if (gs) {
+	  loadGame(JSON.parse(gs));
+	}
   }
 
   updateStats();
@@ -623,10 +673,10 @@ function activity(a)
 {
   var act = gameState.activities[a];
   if (act.energy) {
-	gameState.resources.energy += act.energy;
+	gameState.resources.energy += act.energy * act.genmod.energy;
   }
   if (act.bits) {
-	gameState.resources.bits += act.bits; 
+	gameState.resources.bits += act.bits * act.genmod.bits; 
   }
   updateStats();
 }
@@ -665,7 +715,7 @@ function research(resname)
 {
   res = gameState.research_tree[resname];
   if (tryPay(res.cost)) {
-	document.getElementById("research-"+resname).remove();
+	res.researched = true;
 	res.onResearch();
 	for (var i = 0; i < res.prereq_of.length; i++) {
 	  var rname = res.prereq_of[i];
@@ -754,7 +804,7 @@ function updateStats()
   }
   for (var resname in gameState.research_tree) {
 	var res = gameState.research_tree[resname];
-	if (res.prereq == 0) {
+	if (res.prereq == 0 && ! res.researched) {
 	  var res_button = document.getElementById("research-"+resname);
 	  if (res_button) {
 		res_button.style.visibility = "initial";
@@ -781,10 +831,10 @@ function updateStats()
 	var d = document.getElementById(resname+"-qty");
 	d.innerHTML = "";
 	if (res.energy) {
-	  d.innerHTML += formatUnit(res.energy, "J");
+	  d.innerHTML += formatUnit(res.energy * res.genmod.energy, "J");
 	}
 	if (res.bits) {
-	  d.innerHTML += ' ' + formatUnit(res.bits, "b");
+	  d.innerHTML += ' ' + formatUnit(res.bits * res.genmod.bits, "b");
 	}
   }
   for (var resname in gameState.buildings) {
