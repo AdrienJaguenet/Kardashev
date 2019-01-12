@@ -858,7 +858,7 @@ function totalInfo()
   for (var bname in gameState.buildings) {
 	var building = gameState.buildings[bname];
 	if (building.gen.bits) {
-	  s += building.total * building.gen.bits * building.genmod.energy;
+	  s += building.total * building.gen.bits * building.genmod.bits;
 	}
   }
   return s;
