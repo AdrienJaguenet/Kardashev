@@ -762,7 +762,9 @@ function upgrade(resname)
 }
 
 function destroy(bname) {
-  gameState.buildings[bname].total --;
+  if (gameState.buildings[bname].total > 0) {
+	gameState.buildings[bname].total --;
+  }
   updateStats();
 }
 
