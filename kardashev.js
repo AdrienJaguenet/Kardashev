@@ -16,6 +16,12 @@ var gameState = {
 	wood : "g",
 	population : ""
   },
+  resourcenames : {
+	energy : "energy",
+	bits : "information",
+	freeland : "free land",
+	wood : "wood"
+  },
   year : 1,
   activities : {
 	hunt : {
@@ -690,11 +696,10 @@ function initGame()
 function activity(a)
 {
   var act = gameState.activities[a];
-  if (act.energy) {
-	gameState.resources.energy += act.energy * act.genmod.energy;
-  }
-  if (act.bits) {
-	gameState.resources.bits += act.bits * act.genmod.bits; 
+  for (resname in gameState.resources) {
+	if (act[resname]) {
+	  gameState.resources[resname] += act[resname] * act.genmod[resname];
+	}
   }
   updateStats();
 }
@@ -860,11 +865,10 @@ function updateStats()
 		res_button.style.display = "";
 		var d = document.getElementById("tech-"+resname+"-cost");
 		d.innerHTML = "";
-		if (res.cost.energy) {
-		  d.innerHTML += formatUnit(res.cost.energy, "J");
-		}
-		if (res.cost.bits) {
-		  d.innerHTML += ' ' + formatUnit(res.cost.bits, "b");
+		for (resource in gameState.resources) {
+		  if (res.cost[resource]) {
+			d.innerHTML += formatUnit(res.cost[resource], gameState.units[resource]) + " of " + gameState.resourcenames[resource] + " ";
+		  }
 		}
 	  }
 	} else {
@@ -881,7 +885,7 @@ function updateStats()
 	d.innerHTML = "";
 	for (resource in gameState.resources) {
 	  if (res[resource]) {
-		d.innerHTML += formatUnit(res[resource], gameState.units[resource]);
+		d.innerHTML += formatUnit(res[resource] * res.genmod[resource], gameState.units[resource])+ " of " + gameState.resourcenames[resource] + " ";
 	  }
 	}
   }
@@ -890,12 +894,10 @@ function updateStats()
 	document.getElementById(resname+"-cost").innerHTML = formatUnit(getCostVal(res.cost.energy, res.alpha, res.total), "J");
 	var d = document.getElementById(resname+"-gain");
 	d.innerHTML = "";
-	if (res.gen.energy) {
-	  d.innerHTML += formatUnit(res.gen.energy * res.genmod.energy, "W");
-	}
-
-	if (res.gen.bits) {
-	  d.innerHTML += ' ' + formatUnit(res.gen.bits * res.genmod.bits, "b/s");
+	for (resource in gameState.resources) {
+	  if (res.gen[resource]) {
+		d.innerHTML += formatUnit(res.gen[resource] * res.genmod[resource], gameState.units[resource])+ " of " + gameState.resourcenames[resource] + " ";
+	  }
 	}
   }
 }
