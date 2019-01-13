@@ -9,12 +9,19 @@ body {
   font-family: sans-serif;
 }
 
-.cost-qty {
+.positive {
+  color: green;
+}
+
+.negative {
   color: red;
 }
 
+.neutral {
+  color: white;
+}
+
 .gain-qty {
-  color: green;
 }
 
 button {
@@ -29,4 +36,19 @@ button {
   background-color: rgba(0,0,0,0.8);
   color: white;
 }
+
+div.stats {
+  display: inline-block;
+  border: 2px solid black;
+  padding: 1em;
+  text-align: center;
+}
+
+div.stats > span.stat-name {
+  font-variant: small-caps;
+}
+
+div.stats > span.stat-delta {
+  text-align: center;
+} 
 

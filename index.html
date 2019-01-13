@@ -15,27 +15,44 @@
 	<div id="content">
 	  <div id="stats-main">
 		<p>t: <span id="stat-year">0</span></p>
-		<div id="stat-energy">
+		<div id="stat-energy" class="stats">
 		  <span class="stat-name" id="energy-name">Energy: </span>
-		  <span class="stat-qty" id="stat-energy-qty">0</span>
+		  <span class="stat-qty" id="stat-energy-qty">0</span><br/>
+		  <span class="stat-delta" id="energy-delta">0</span>
 		</div>
-		<div id="stat-power">
-		  <span class="stat-name" id="power-name">Power: </span>
-		  <span class="stat-qty" id="stat-power-qty">0</span>
-		</div>
-		<div id="stat-bits">
+		<div id="stat-bits" class="stats">
 		  <span class="stat-name" id="bits-name">Information: </span>
-		  <span class="stat-qty" id="stat-bits-qty">0</span>
+		  <span class="stat-qty" id="stat-bits-qty">0</span><br/>
+		  <span class="stat-delta" id="bits-delta">0</span>
 		</div>
-		<div id="stat-info">
-		  <span class="stat-name" id="info-name">Information rate: </span>
-		  <span class="stat-qty" id="stat-info-qty">0</span>
+		<div id="stat-population" class="stats">
+		  <span class="stat-name" id="population-name">Population: </span>
+		  <span class="stat-qty" id="stat-population-qty">0</span><br/>
+		  <span class="stat-delta" id="population-delta">0</span>
+		</div>
+		<div id="stat-freeland" class="stats">
+		  <span class="stat-name" id="freeland-name">Free land: </span>
+		  <span class="stat-qty" id="stat-freeland-qty">0</span><br/>
+		  <span class="stat-delta" id="freeland-delta">0</span>
+		</div>
+		<div id="stat-forestland" class="stats">
+		  <span class="stat-name" id="forestland-name">Forest land: </span>
+		  <span class="stat-qty" id="stat-forestland-qty">0</span><br/>
+		  <span class="stat-delta" id="forestland-delta">0</span>
+		</div>
+		<div id="stat-wood" class="stats">
+		  <span class="stat-name" id="wood-name">Wood: </span>
+		  <span class="stat-qty" id="stat-wood-qty">0</span><br/>
+		  <span class="stat-delta" id="wood-delta">0</span>
 		</div>
 	  </div>
 	  <h2>Activities</h2>
 	  <div id="controls-activities">
 		<button id="manual-hunt" onclick="activity('hunt')">Hunt (
 		  <span class="gain-qty" id="hunt-qty">0</span>
+		  )</button>
+		<button id="manual-gather" onclick="activity('gather')">Gather (
+		  <span class="gain-qty" id="gather-qty">0</span>
 		  )</button>
 		<button id="manual-observe" onclick="activity('observe')">Observe your surroundings (
 		  <span class="gain-qty" id="observe-qty">0</span>

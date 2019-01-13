@@ -3,6 +3,18 @@ var gameState = {
   resources : {
     energy : 0,
 	bits : 0,
+	freeland : 0,
+	forestland : 0,
+	wood : 0,
+	population : 0
+  },
+  units : {
+	energy : "J",
+	bits : "b",
+	freeland : "ha",
+	forestland : "ha",
+	wood : "g",
+	population : ""
   },
   year : 1,
   activities : {
@@ -20,6 +32,9 @@ var gameState = {
 	},
 	stargaze : {
 	  bits: 1.0e7
+	},
+	gather : {
+	  wood: 1e3
 	}
   },
   research_tree : {
@@ -655,6 +670,7 @@ function initGame()
   }
   unlock_activity('hunt');
   unlock_activity('observe');
+  unlock_activity('gather');
   unlock_building("hunter");
   unlock_building("shaman");
   if (typeof(Storage) != 'undefined') {
@@ -664,6 +680,8 @@ function initGame()
 	}
   }
 
+  gameState.resources.freeland = 2e9;
+  gameState.resources.forestland = 7e9;
   updateStats();
   var interval_tick = setInterval(tick, 1000);
   var interval_save = setInterval(saveGame, 5000);
@@ -702,13 +720,15 @@ function getCostVal(val, alpha, lvl) {
   return val * Math.pow(alpha, lvl);
 }
 
-function buy(b)
+function buy(b, qty=1)
 {
   var building = gameState.buildings[b];
-  if (tryPay(building.cost, building.alpha, building.total)) {
+  var n = 0;
+  while (tryPay(building.cost, building.alpha, building.total) && n < qty) {
 	building.total += 1;
-	updateStats();
+	++n;
   }
+  updateStats();
 }
 
 function research(resname)
@@ -736,6 +756,11 @@ function upgrade(resname)
   }
 }
 
+function destroy(bname) {
+  gameState.buildings[bname].total --;
+  updateStats();
+}
+
 function genButtons()
 {
   var stats_elm = document.getElementById("stats-main");
@@ -751,10 +776,12 @@ function genButtons()
 	  '</div>'
 	buy_elm.innerHTML += 
 	  '<div id="buy-'+bname+'" class="buy-building">'+
+	  '<button onclick="destroy(\''+bname+'\');">destroy</button> '+
 	  '<span class="building-desc" id="'+bname+'-desc">'+building.name+'</span> '+
 	  'cost <span class="cost-qty" id="'+bname+'-cost">0</span>'+
 	  ', generates <span class="gain-qty" id="'+bname+'-gain">0</span> '+
-	  '<button onclick="buy(\''+bname+'\');">Buy</button>'
+	  '<button onclick="buy(\''+bname+'\');">Buy</button>'+
+	  '<button onclick="buy(\''+bname+'\', 10);">Buy x10</button>'+
 	'</div>'
   }
   for (var tname in gameState.research_tree) {
@@ -785,21 +812,43 @@ function getSaganKardashevInfoLvl(bits)
   return String.fromCharCode(Math.floor(Math.log10(bits))+'A'.charCodeAt(0));
 }
 
+function writeUnit(id, qty, unit) {
+  var elm = document.getElementById(id);
+  elm.innerHTML = formatUnit(qty, unit); 
+  if (qty > 0) {
+	elm.classList.remove("negative");
+	elm.classList.remove("neutral");
+	elm.classList.add("positive");
+  } else if (qty < 0) {
+	elm.classList.remove("neutral");
+	elm.classList.remove("positive");
+	elm.classList.add("negative");
+  } else {
+	elm.classList.remove("negative");
+	elm.classList.remove("positive");
+	elm.classList.add("neutral");
+  }
+}
+
 function updateStats()
 {
-  document.getElementById("stat-energy-qty").innerHTML = formatUnit(gameState.resources.energy, "J");
-  document.getElementById("stat-bits-qty").innerHTML = formatUnit(gameState.resources.bits, "b");
-  document.getElementById("stat-power-qty").innerHTML = formatUnit(totalPower(), "W");
-  document.getElementById("stat-info-qty").innerHTML = formatUnit(totalInfo(), "b/s");
+  for (resname in gameState.resources) {
+	writeUnit("stat-"+resname+"-qty", gameState.resources[resname], gameState.units[resname]);
+	if (resname == "energy") {
+	  writeUnit(resname+"-delta", getDelta(resname), "W");
+	} else {
+	  writeUnit(resname+"-delta", getDelta(resname), gameState.units[resname]+"/s");
+	}
+  }
   document.getElementById("stat-year").innerHTML = ""+gameState.year;
-  document.getElementById("civ-level").innerHTML = getSaganKardashevPowerLvl(totalPower()).toFixed(3) + '-'+getSaganKardashevInfoLvl(totalInfo());
+  document.getElementById("civ-level").innerHTML = getSaganKardashevPowerLvl(getDelta('energy')).toFixed(3) + '-'+getSaganKardashevInfoLvl(getDelta('bits'));
   for (var bname in gameState.buildings) {
 	var b = gameState.buildings[bname];
 	document.getElementById(bname+"-qty").innerHTML = b.total;
   }
   for (var upname in gameState.upgrades) {
 	var u = gameState.upgrades[upname];
-	document.getElementById("upgrade-"+upname+"-cost").innerHTML = formatUnit(getCostVal(u.cost.energy, u.alpha, u.level), "J");
+	writeUnit("upgrade-"+upname+"-cost", getCostVal(u.cost.energy, u.alpha, u.level), "J");
 	document.getElementById("upgrade-"+upname+"-level").innerHTML = u.level;
   }
   for (var resname in gameState.research_tree) {
@@ -830,11 +879,10 @@ function updateStats()
 	var res = gameState.activities[resname];
 	var d = document.getElementById(resname+"-qty");
 	d.innerHTML = "";
-	if (res.energy) {
-	  d.innerHTML += formatUnit(res.energy * res.genmod.energy, "J");
-	}
-	if (res.bits) {
-	  d.innerHTML += ' ' + formatUnit(res.bits * res.genmod.bits, "b");
+	for (resource in gameState.resources) {
+	  if (res[resource]) {
+		d.innerHTML += formatUnit(res[resource], gameState.units[resource]);
+	  }
 	}
   }
   for (var resname in gameState.buildings) {
@@ -852,33 +900,22 @@ function updateStats()
   }
 }
 
-function totalInfo()
+function getDelta(resource)
 {
   var s = 0;
   for (var bname in gameState.buildings) {
 	var building = gameState.buildings[bname];
-	if (building.gen.bits) {
-	  s += building.total * building.gen.bits * building.genmod.bits;
-	}
-  }
-  return s;
-}
-
-function totalPower()
-{
-  var s = 0;
-  for (var bname in gameState.buildings) {
-	var building = gameState.buildings[bname];
-	if (building.gen.energy) {
-	  s += building.total * building.gen.energy * building.genmod.energy;
+	if (building.gen[resource]) {
+	  s += building.total * building.gen[resource] * building.genmod[resource];
 	}
   }
   return s;
 }
 
 function tick() {
-  gameState.resources.energy += totalPower();
-  gameState.resources.bits += totalInfo();
+  for (resource in gameState.resources) {
+	gameState.resources[resource] += getDelta(resource);
+  }
   gameState.year += 1;
   updateStats();
 }
