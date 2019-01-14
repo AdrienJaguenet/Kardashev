@@ -3,23 +3,16 @@ var gameState = {
   resources : {
     energy : 0,
 	bits : 0,
-	freeland : 0,
-	forestland : 0,
 	wood : 0,
-	population : 0
   },
   units : {
 	energy : "J",
 	bits : "b",
-	freeland : "ha",
-	forestland : "ha",
-	wood : "g",
-	population : ""
+	wood : "g"
   },
   resourcenames : {
 	energy : "energy",
 	bits : "information",
-	freeland : "free land",
 	wood : "wood"
   },
   year : 1,
@@ -686,8 +679,6 @@ function initGame()
 	}
   }
 
-  gameState.resources.freeland = 2e9;
-  gameState.resources.forestland = 7e9;
   updateStats();
   var interval_tick = setInterval(tick, 1000);
   var interval_save = setInterval(saveGame, 5000);
