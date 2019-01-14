@@ -14,6 +14,12 @@ var gameState = {
 	bits : "information",
 	wood : "wood"
   },
+  allocated : {
+	land : {
+	  woodland : 0,
+	  farmland : 0
+	}
+  },
   year : 1,
   activities : {
 	hunt : {
