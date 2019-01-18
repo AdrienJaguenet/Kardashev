@@ -215,21 +215,23 @@ function destroy(bname) {
 function genButtons()
 {
 	var stats_elm = document.getElementById("overview");
-	var buy_elm = document.getElementById("buildings");
+	var buy_elm = document.getElementById("buildings-table");
 	var tech_elm = document.getElementById("techs");
-	var up_elm = document.getElementById("upgrades");
+	var up_elm = document.getElementById("upgrades-table");
 	for (var bname in gameState.buildings) {
 		var building = gameState.buildings[bname];
 			buy_elm.innerHTML += 
-			'<div id="buy-'+bname+'" class="buy-building">'+
-			'<span class="building-desc" id="'+bname+'-desc">'+building.name+'</span> '+
-			' (<span class="stat-qty" id="'+bname+'-qty">0</span>) '+
-			'cost <span class="cost-qty" id="'+bname+'-cost">0</span>'+
-			', generates <span class="gain-qty" id="'+bname+'-gain">0</span> '+
-			'<button onclick="destroy(\''+bname+'\');">destroy</button> '+
+			'<tr id="buy-'+bname+'" class="buy-building">'+
+			'<td class="building-desc" id="'+bname+'-desc">'+building.name+'</td>'+
+			'<td class="stat-qty" id="'+bname+'-qty">0</td>'+
+			'<td class="cost-qty" id="'+bname+'-cost">0</td>'+
+			'<td class="gain-qty" id="'+bname+'-gain">0</td>'+
+			'<td>'+
+			'<button onclick="destroy(\''+bname+'\');">destroy</button>'+
 			'<button onclick="buy(\''+bname+'\');">Buy</button>'+
 			'<button onclick="buy(\''+bname+'\', 10);">Buy x10</button>'+
-			'</div>'
+			'</td>'+
+			'</tr>'
 	}
 	for (var tname in gameState.research_tree) {
 		var tech = gameState.research_tree[tname];
@@ -241,14 +243,15 @@ function genButtons()
 	for (var uname in gameState.upgrades) {
 		var upgrade = gameState.upgrades[uname];
 		up_elm.innerHTML +=
-			'<div id="upgrade-'+uname+'">'+
-			upgrade.name+
-			' (level <span id="upgrade-'+uname+'-level">0</span>) '+
-			'<button id="upgrade-'+uname+'-x1" onclick="upgrade(\''+uname+'\')">Upgrade</button> '+
-			'<button id="upgrade-'+uname+'-x10" onclick="upgrade(\''+uname+'\', 10)">x10</button> '+
-			' (<span class="cost-qty" id="upgrade-'+uname+'-cost">0</span>)'+
-			': '+upgrade.desc+
-			'</div>'
+			'<tr id="upgrade-'+uname+'">'+
+			'<td>'+upgrade.name+'</td>'+
+			'<td id="upgrade-'+uname+'-level">0</td>'+
+			'<td class="cost-qty" id="upgrade-'+uname+'-cost">0</td>'+
+			'<td>'+upgrade.desc+'</td>'+
+			'<td>'+
+			'<button id="upgrade-'+uname+'-x1" onclick="upgrade(\''+uname+'\')">Upgrade</button>'+
+			'<button id="upgrade-'+uname+'-x10" onclick="upgrade(\''+uname+'\', 10)">x10</button></td>'+
+			'</tr>'
 	}
 }
 

@@ -55,6 +55,20 @@ button {
   color: white;
 }
 
+th td {
+	font-weight: bold;
+	border: solid 1px black;
+}
+
+td {
+	border-top: solid 1px black;
+	padding: 0.5em;
+}
+
+table {
+	border: solid 1px black;
+}
+
 div.stats {
   display: inline-block;
   border: 2px solid black;
