@@ -83,6 +83,7 @@ function saveGame()
 
 function initGame()
 {
+	select_tab('overview');
   genButtons();
   for (resname in gameState.research_tree) {
 	var res = gameState.research_tree[resname];
@@ -213,10 +214,10 @@ function destroy(bname) {
 
 function genButtons()
 {
-  var stats_elm = document.getElementById("stats-main");
-  var buy_elm = document.getElementById("controls-buy");
-  var tech_elm = document.getElementById("controls-tech");
-  var up_elm = document.getElementById("controls-upgrades");
+  var stats_elm = document.getElementById("overview");
+  var buy_elm = document.getElementById("buildings");
+  var tech_elm = document.getElementById("techs");
+  var up_elm = document.getElementById("upgrades");
   for (var bname in gameState.buildings) {
 	var building = gameState.buildings[bname];
 	stats_elm.innerHTML +=

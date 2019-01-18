@@ -29,9 +29,27 @@ button {
   color: white;
 }
 
+.tab-btn {
+	border-top: 1px black solid;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-right: 1px black solid;
+	border-left: 1px black solid;
+	border-bottom: none;
+	padding: 1em;
+	margin-bottom: none;
+	color: gray;
+}
+
+.tab-btn.selected {
+	font-weight: bold;
+	color: white;
+  background-color: rgba(0,0,0,0.8);
+}
+
 #content {
   border: solid black 1px;
-  margin: 1em;
+	margin-top: none;
   padding: 1em;
   background-color: rgba(0,0,0,0.8);
   color: white;

@@ -1,71 +1,79 @@
 <!DOCTYPE html>
 <html>
-  <head>
-	<meta charset="utf-8">
-	<title>Kardashev Incremental</title>
-	<link rel="stylesheet" href="style.css" type="text/css" media="all" />
-	<script src="gamedefs.js"/></script>
-	<script src="kardashev.js"/></script>
-  </head>
-  <body onload="initGame();">
-	<header>
-	  <h1>Kardashev Incremental</h1>
-	  <p><a href="https://github.com/AdrienJaguenet/Kardashev">Github repo</a></p>
-	  <h2>Civilisation level: <span id="civ-level">0</span></h2>
-	</header>
-	<div id="content">
-	  <div id="stats-main">
-		<p>t: <span id="stat-year">0</span></p>
-		<div id="stat-energy" class="stats">
-		  <span class="stat-name" id="energy-name">Energy: </span>
-		  <span class="stat-qty" id="stat-energy-qty">0</span><br/>
-		  <span class="stat-delta" id="energy-delta">0</span>
+	<head>
+		<meta charset="utf-8">
+		<title>Kardashev Incremental</title>
+		<link rel="stylesheet" href="style.css" type="text/css" media="all" />
+		<script src="ui.js"/></script>
+		<script src="gamedefs.js"/></script>
+		<script src="kardashev.js"/></script>
+	</head>
+	<body onload="initGame();">
+		<header>
+			<h1>Kardashev Incremental</h1>
+			<p><a href="https://github.com/AdrienJaguenet/Kardashev">Github repo</a></p>
+			<h2>Civilisation level: <span id="civ-level">0</span></h2>
+		</header>
+		<div id="tab-select">
+			<button class="tab-btn" id="tab-overview" onclick="select_tab('overview');">Overview</button>
+			<button class="tab-btn" id="tab-buildings" onclick="select_tab('buildings');">Buildings</button>
+			<button class="tab-btn" id="tab-techs" onclick="select_tab('techs');">Technologies</button>
+			<button class="tab-btn" id="tab-upgrades" onclick="select_tab('upgrades');">Upgrades</button>
 		</div>
-		<div id="stat-bits" class="stats">
-		  <span class="stat-name" id="bits-name">Information: </span>
-		  <span class="stat-qty" id="stat-bits-qty">0</span><br/>
-		  <span class="stat-delta" id="bits-delta">0</span>
+		<div id="content">
+				<p>t: <span id="stat-year">0</span></p>
+				<div id="stat-energy" class="stats">
+					<span class="stat-name" id="energy-name">Energy: </span>
+					<span class="stat-qty" id="stat-energy-qty">0</span><br/>
+					<span class="stat-delta" id="energy-delta">0</span>
+				</div>
+				<div id="stat-bits" class="stats">
+					<span class="stat-name" id="bits-name">Information: </span>
+					<span class="stat-qty" id="stat-bits-qty">0</span><br/>
+					<span class="stat-delta" id="bits-delta">0</span>
+				</div>
+				<div id="stat-wood" class="stats">
+					<span class="stat-name" id="wood-name">Wood: </span>
+					<span class="stat-qty" id="stat-wood-qty">0</span><br/>
+					<span class="stat-delta" id="wood-delta">0</span>
+				</div>
+			<div id="overview">
+				<h2>Activities</h2>
+				<div id="controls-activities">
+					<button id="manual-hunt" onclick="activity('hunt')">Hunt (
+						<span class="gain-qty" id="hunt-qty">0</span>
+						)</button>
+					<button id="manual-gather" onclick="activity('gather')">Gather (
+						<span class="gain-qty" id="gather-qty">0</span>
+						)</button>
+					<button id="manual-observe" onclick="activity('observe')">Observe your surroundings (
+						<span class="gain-qty" id="observe-qty">0</span>
+						)</button>
+					<button id="manual-fish" onclick="activity('fish')">Fish (
+						<span class="gain-qty" id="fish-qty">0</span>
+						)</button>
+					<button id="manual-farming" onclick="activity('farming')">Farm (
+						<span class="gain-qty" id="farming-qty">0</span>
+						)</button>
+					<button id="manual-stargaze" onclick="activity('stargaze')">Observe the stars (
+						<span class="gain-qty" id="stargaze-qty">0</span>
+						)</button>
+				</div>
+			</div>
+			<div id="buildings">
+			<h2>Buy</h2>
+			</div>
+			<div id="techs">
+			<h2> Technologies </h2>
+			</div >
+			<div id="upgrades">
+			<h2> Upgrades </h2>
+			</div>
 		</div>
-		<div id="stat-wood" class="stats">
-		  <span class="stat-name" id="wood-name">Wood: </span>
-		  <span class="stat-qty" id="stat-wood-qty">0</span><br/>
-		  <span class="stat-delta" id="wood-delta">0</span>
-		</div>
-	  </div>
-	  <h2>Activities</h2>
-	  <div id="controls-activities">
-		<button id="manual-hunt" onclick="activity('hunt')">Hunt (
-		  <span class="gain-qty" id="hunt-qty">0</span>
-		  )</button>
-		<button id="manual-gather" onclick="activity('gather')">Gather (
-		  <span class="gain-qty" id="gather-qty">0</span>
-		  )</button>
-		<button id="manual-observe" onclick="activity('observe')">Observe your surroundings (
-		  <span class="gain-qty" id="observe-qty">0</span>
-		  )</button>
-		<button id="manual-fish" onclick="activity('fish')">Fish (
-		  <span class="gain-qty" id="fish-qty">0</span>
-		  )</button>
-		<button id="manual-farming" onclick="activity('farming')">Farm (
-		  <span class="gain-qty" id="farming-qty">0</span>
-		  )</button>
-		<button id="manual-stargaze" onclick="activity('stargaze')">Observe the stars (
-		  <span class="gain-qty" id="stargaze-qty">0</span>
-		  )</button>
-	  </div>
-	  <h2>Buy</h2>
-	  <div id="controls-buy">
-	  </div>
-	  <h2> Technologies </h2>
-	  <div id="controls-tech">
-	  </div >
-	  <h2> Upgrades </h2>
-	  <div id="controls-upgrades">
-	  </div>
-	</div>
-	<footer>
-	  <p>Game doesn't work? It might have been broken by some update. Try removing the local data and reload the page. <button onclick="localStorage.removeItem('gameState');">RESET</button></p>
-	  <p>&copy;2019 Adrien Jaguenet</p>
-	</footer>
-  </body>
+		<footer>
+			<p>Game doesn't work? It might have been broken by some update. Try removing the local data and reload the page. 
+			<button onclick="localStorage.removeItem('gameState');">RESET</button></p>
+			<p>&copy;2019 Adrien Jaguenet</p>
+		</footer>
+	</body>
 </html>
