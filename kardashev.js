@@ -195,13 +195,15 @@ function research(resname)
 	}
 }
 
-function upgrade(resname)
+function upgrade(resname, qty=1)
 {
 	res = gameState.upgrades[resname];
-	if (tryPay(res.cost, res.alpha, res.level)) {
+	var n = 0;
+	while (tryPay(res.cost, res.alpha, res.level) && n < qty) {
 		res.onUpgrade();
 		res.level += 1;
 		updateStats();
+		++n;
 	}
 }
 
@@ -245,11 +247,13 @@ function genButtons()
 	for (var uname in gameState.upgrades) {
 		var upgrade = gameState.upgrades[uname];
 		up_elm.innerHTML +=
-			'<button id="upgrade-'+uname+'" onclick="upgrade(\''+uname+'\')">'+upgrade.name+' (cost '+
-					'<span class="cost-qty" id="upgrade-'+uname+'-cost">0</span>'+
-					'): '+upgrade.desc+' (level'+
-						'<span id="upgrade-'+uname+'-level">0</span>)'+
-								 ')</button>'
+			'Level <span id="upgrade-'+uname+'-level">0</span> '+
+			'<button id="upgrade-'+uname+'" onclick="upgrade(\''+uname+'\')">Upgrade</button> '+
+			'<button id="upgrade-'+uname+'-x10" onclick="upgrade(\''+uname+'\', 10)">x10</button> '+
+			upgrade.name+
+			' (<span class="cost-qty" id="upgrade-'+uname+'-cost">0</span>)'+
+			': '+upgrade.desc+
+			'<br/>'
 	}
 }
 
