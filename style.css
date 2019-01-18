@@ -27,9 +27,13 @@ body {
 button {
   background-color: black;
   color: white;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 .tab-btn {
+	-moz-user-select: none;
+	user-select: none;
 	border-top: 1px black solid;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
