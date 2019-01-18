@@ -39,6 +39,12 @@ button {
 	padding: 1em;
 	margin-bottom: none;
 	color: gray;
+	background-color: black;
+	display: inline-block;
+}
+
+.tab-btn:hover {
+	background-color: #202020;
 }
 
 .tab-btn.selected {
