@@ -65,7 +65,12 @@ td {
 	padding: 0.5em;
 }
 
+td.numeric {
+	text-align: right;
+}
+
 table {
+	border-collapse: collapse;
 	border: solid 1px black;
 }
 

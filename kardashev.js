@@ -223,8 +223,8 @@ function genButtons()
 			buy_elm.innerHTML += 
 			'<tr id="buy-'+bname+'" class="buy-building">'+
 			'<td class="building-desc" id="'+bname+'-desc">'+building.name+'</td>'+
-			'<td class="stat-qty" id="'+bname+'-qty">0</td>'+
-			'<td class="cost-qty" id="'+bname+'-cost">0</td>'+
+			'<td class="stat-qty numeric" id="'+bname+'-qty">0</td>'+
+			'<td class="cost-qty numeric" id="'+bname+'-cost">0</td>'+
 			'<td class="gain-qty" id="'+bname+'-gain">0</td>'+
 			'<td>'+
 			'<button onclick="destroy(\''+bname+'\');">destroy</button>'+
@@ -245,8 +245,8 @@ function genButtons()
 		up_elm.innerHTML +=
 			'<tr id="upgrade-'+uname+'">'+
 			'<td>'+upgrade.name+'</td>'+
-			'<td id="upgrade-'+uname+'-level">0</td>'+
-			'<td class="cost-qty" id="upgrade-'+uname+'-cost">0</td>'+
+			'<td class="numeric" id="upgrade-'+uname+'-level">0</td>'+
+			'<td class="cost-qty numeric" id="upgrade-'+uname+'-cost">0</td>'+
 			'<td>'+upgrade.desc+'</td>'+
 			'<td>'+
 			'<button id="upgrade-'+uname+'-x1" onclick="upgrade(\''+uname+'\')">Upgrade</button>'+
