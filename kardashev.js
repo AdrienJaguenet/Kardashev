@@ -241,13 +241,14 @@ function genButtons()
 	for (var uname in gameState.upgrades) {
 		var upgrade = gameState.upgrades[uname];
 		up_elm.innerHTML +=
+			'<div id="upgrade-'+uname+'">'+
 			upgrade.name+
 			' (level <span id="upgrade-'+uname+'-level">0</span>) '+
-			'<button id="upgrade-'+uname+'" onclick="upgrade(\''+uname+'\')">Upgrade</button> '+
+			'<button id="upgrade-'+uname+'-x1" onclick="upgrade(\''+uname+'\')">Upgrade</button> '+
 			'<button id="upgrade-'+uname+'-x10" onclick="upgrade(\''+uname+'\', 10)">x10</button> '+
 			' (<span class="cost-qty" id="upgrade-'+uname+'-cost">0</span>)'+
 			': '+upgrade.desc+
-			'<br/>'
+			'</div>'
 	}
 }
 
