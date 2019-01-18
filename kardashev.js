@@ -12,7 +12,6 @@ function unlock_building(bname) {
 	gameState.buildings[bname].unlocked = true;
 	unlock_element(bname+"-qty");
 	unlock_element("buy-"+bname);
-	unlock_element("stat-"+bname);
 }
 
 function unlock_upgrade(bname) {
@@ -117,7 +116,6 @@ function initGame()
 		}
 		gameState.buildings[resname].total = 0;
 		lock_element("buy-"+resname);
-		lock_element("stat-"+resname);
 		lock_element(resname+"-qty");
 	}
 	unlock_activity('hunt');
@@ -222,17 +220,13 @@ function genButtons()
 	var up_elm = document.getElementById("upgrades");
 	for (var bname in gameState.buildings) {
 		var building = gameState.buildings[bname];
-		stats_elm.innerHTML +=
-			'<div id="stat-'+bname+'">'+
-			'<span class="stat-name" id="hunter-name">'+building.name+': </span>'+
-			'<span class="stat-qty" id="'+bname+'-qty">0</span>'+
-			'</div>'
 			buy_elm.innerHTML += 
 			'<div id="buy-'+bname+'" class="buy-building">'+
-			'<button onclick="destroy(\''+bname+'\');">destroy</button> '+
 			'<span class="building-desc" id="'+bname+'-desc">'+building.name+'</span> '+
+			' (<span class="stat-qty" id="'+bname+'-qty">0</span>) '+
 			'cost <span class="cost-qty" id="'+bname+'-cost">0</span>'+
 			', generates <span class="gain-qty" id="'+bname+'-gain">0</span> '+
+			'<button onclick="destroy(\''+bname+'\');">destroy</button> '+
 			'<button onclick="buy(\''+bname+'\');">Buy</button>'+
 			'<button onclick="buy(\''+bname+'\', 10);">Buy x10</button>'+
 			'</div>'
@@ -247,10 +241,10 @@ function genButtons()
 	for (var uname in gameState.upgrades) {
 		var upgrade = gameState.upgrades[uname];
 		up_elm.innerHTML +=
-			'Level <span id="upgrade-'+uname+'-level">0</span> '+
+			upgrade.name+
+			' (level <span id="upgrade-'+uname+'-level">0</span>) '+
 			'<button id="upgrade-'+uname+'" onclick="upgrade(\''+uname+'\')">Upgrade</button> '+
 			'<button id="upgrade-'+uname+'-x10" onclick="upgrade(\''+uname+'\', 10)">x10</button> '+
-			upgrade.name+
 			' (<span class="cost-qty" id="upgrade-'+uname+'-cost">0</span>)'+
 			': '+upgrade.desc+
 			'<br/>'
