@@ -57,6 +57,11 @@ button {
   background-color: rgba(0,0,0,0.8);
 }
 
+.tab-btn.new::after {
+  content: "*";
+  color: red;
+}
+
 #content {
   border: solid black 1px;
 	margin-top: none;

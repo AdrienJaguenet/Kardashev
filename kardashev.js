@@ -12,11 +12,13 @@ function unlock_building(bname) {
 	gameState.buildings[bname].unlocked = true;
 	unlock_element(bname+"-qty");
 	unlock_element("buy-"+bname);
+	ui_new_elm('buildings');
 }
 
 function unlock_upgrade(bname) {
 	gameState.upgrades[bname].unlocked = true;
 	unlock_element("upgrade-"+bname);
+	ui_new_elm('upgrades');
 }
 
 function unlock_activity(actname) {
@@ -216,29 +218,34 @@ function genButtons()
 {
 	var stats_elm = document.getElementById("overview");
 	var buy_elm = document.getElementById("buildings-table");
-	var tech_elm = document.getElementById("techs");
+	var tech_elm = document.getElementById("technologies-table");
 	var up_elm = document.getElementById("upgrades-table");
 	for (var bname in gameState.buildings) {
 		var building = gameState.buildings[bname];
 			buy_elm.innerHTML += 
 			'<tr id="buy-'+bname+'" class="buy-building">'+
-			'<td class="building-desc" id="'+bname+'-desc">'+building.name+'</td>'+
-			'<td class="stat-qty numeric" id="'+bname+'-qty">0</td>'+
-			'<td class="cost-qty numeric" id="'+bname+'-cost">0</td>'+
-			'<td class="gain-qty" id="'+bname+'-gain">0</td>'+
-			'<td>'+
-			'<button onclick="destroy(\''+bname+'\');">destroy</button>'+
-			'<button onclick="buy(\''+bname+'\');">Buy</button>'+
-			'<button onclick="buy(\''+bname+'\', 10);">Buy x10</button>'+
-			'</td>'+
+			  '<td class="building-desc" id="'+bname+'-desc">'+building.name+'</td>'+
+			  '<td class="stat-qty numeric" id="'+bname+'-qty">0</td>'+
+			  '<td class="cost-qty numeric" id="'+bname+'-cost">0</td>'+
+			  '<td class="gain-qty" id="'+bname+'-gain">0</td>'+
+			  '<td>'+
+				'<button onclick="destroy(\''+bname+'\');">destroy</button>'+
+				'<button onclick="buy(\''+bname+'\');">Buy</button>'+
+				'<button onclick="buy(\''+bname+'\', 10);">Buy x10</button>'+
+			  '</td>'+
 			'</tr>'
 	}
 	for (var tname in gameState.research_tree) {
 		var tech = gameState.research_tree[tname];
 		tech_elm.innerHTML += 
-			'<button id="research-'+tname+'" onclick="research(\''+tname+'\')">'+tech.name+' (cost '+
-					'<span class="cost-qty" id="tech-'+tname+'-cost">0</span>'+
-					'): '+tech.desc+'</button>'
+		  '<tr id="research-'+tname+'">'+
+			'<td>'+tech.name+'</td>'+
+			'<td class="cost-qty" id="tech-'+tname+'-cost">0</td>'+
+			'<td>'+tech.desc+'</td>'+
+			'<td>'+
+			  '<button onclick="research(\''+tname+'\')"> Research </button>'+
+			'</td>'+
+		  '</tr>'
 	}
 	for (var uname in gameState.upgrades) {
 		var upgrade = gameState.upgrades[uname];
