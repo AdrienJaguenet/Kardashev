@@ -165,6 +165,18 @@ function tryPay(cost, alpha=1, lvl=0) {
 	return false;
 }
 
+function canAfford(cost, alpha=1, lvl=0) {
+	var costEnergy = 0;
+	var costBits = 0;
+	if (cost.energy) {
+		costEnergy = getCostVal(cost.energy, alpha, lvl);
+	}
+	if (cost.bits) {
+		costBits = getCostVal(cost.bits, alpha, lvl);
+	}
+	return gameState.resources.energy >= costEnergy && gameState.resources.bits >= costBits;
+}
+
 function getCostVal(val, alpha, lvl) {
 	return val * Math.pow(alpha, lvl);
 }
@@ -173,7 +185,7 @@ function buy(b, qty=1)
 {
 	var building = gameState.buildings[b];
 	var n = 0;
-	while (tryPay(building.cost, building.alpha, building.total) && n < qty) {
+	while (n < qty && tryPay(building.cost, building.alpha, building.total)) {
 		building.total += 1;
 		++n;
 	}
@@ -199,7 +211,7 @@ function upgrade(resname, qty=1)
 {
 	res = gameState.upgrades[resname];
 	var n = 0;
-	while (tryPay(res.cost, res.alpha, res.level) && n < qty) {
+	while (n < qty && tryPay(res.cost, res.alpha, res.level)) {
 		res.onUpgrade();
 		res.level += 1;
 		updateStats();
